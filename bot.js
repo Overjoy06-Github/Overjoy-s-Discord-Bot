@@ -1,3 +1,4 @@
+const dotenv = require("dotenv").config()
 const botconfig = require("./botconfig.json");
 const Discord = require("discord.js");
 
@@ -129,5 +130,5 @@ bot.on("messageUpdate", async (oldMsg, newMsg) => {
   getChannel("edited-logs", newMsg.guild).send(loggingEmbed);
   
 });    // lol   
-       
-bot.login(botconfig.token);
+
+bot.login(process.env.BOT_TOKEN);
