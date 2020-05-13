@@ -143,7 +143,7 @@ cmds.ban = (message, args) => {
 
 bot.on("ready", async () => {
   console.log(`${bot.user.username} is online!`);
-  bot.user.setPresence({activity: {name: "Prefix : r!help"}, status: "online"})
+  bot.user.setActivity('r!help', { type: 'STREAMING' });
 });
 
 bot.on("message", msg => {
