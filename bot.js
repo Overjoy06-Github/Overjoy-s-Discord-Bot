@@ -2,8 +2,6 @@ const dotenv = require("dotenv").config();
 const botconfig = require("./botconfig.json");
 const Discord = require("discord.js");
 
-bot.user.setPresence({activity: {name: "Prefix : r!help"}, status: "online"})
-
 const bot = new Discord.Client({ disableEveryone: true });
 const prefix = botconfig.prefix;
 
@@ -145,6 +143,7 @@ cmds.ban = (message, args) => {
 
 bot.on("ready", async () => {
   console.log(`${bot.user.username} is online!`);
+  bot.user.setPresence({activity: {name: "Prefix : r!help"}, status: "online"})
 });
 
 bot.on("message", msg => {
