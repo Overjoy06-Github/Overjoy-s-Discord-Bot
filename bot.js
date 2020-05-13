@@ -164,9 +164,11 @@ bot.on("message", msg => {
 
 // Welcome and Bye Logs
 bot.on("guildMemberAdd", member => {
-  getChannel("greetings-and-farewell", member.guild).send(
-    "**" + member.user.username + "**, has joined the server!"
-  );
+  let embed = new Discord.MessageEmbed()
+    .setTitle("Welcome," + member.user.username + "!")
+    .setDescription(member.user.username + ", has joined the server!)
+    .setColor(0x00ff00);
+  getChannel("greetings-and-farewell", member.guild).send(embed)
 });
 
 bot.on("guildMemberRemove", member => {
@@ -175,11 +177,11 @@ bot.on("guildMemberRemove", member => {
     .filter(role => role.name !== "@everyone")
     .each(role => {
       roles += role.toString() + "\n";
-    )
+   })
   let embed = new Discord.MessageEmbed()
-    .setTitle("Goodbye," + member.use.username + "!")
+    .setTitle("Goodbye," + member.user.username + "!")
     .setDescription(member.user.username + ", has left the server\nRoles : " + roles.trim())
-    .setColor(0x00ff00);
+    .setColor(0xff0000);
   getChannel("greetings-and-farewell", member.guild).send(embed)
 });
 // Deleted Logs
