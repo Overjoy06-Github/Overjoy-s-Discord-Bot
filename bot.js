@@ -170,9 +170,16 @@ bot.on("guildMemberAdd", member => {
 });
 
 bot.on("guildMemberRemove", member => {
-  getChannel("greetings-and-farewell", member.guild).send(
-    "**" + member.user.username + "**, has left the server!"
-  );
+  let roles = ""
+  member.roles.cache
+    .filter(role => role.name !== "@everyone")
+    .each(role => {
+      roles += role.toString() + "\n";
+  let embed = new Discord.MessageEmbed()
+    .setTitle("Goodbye," + member.use.username + "!")
+    .setDescription(member.user.username + ", has left the server\nRoles : " + roles.trim())
+    .setColor(0x00ff00);
+  getChannel("greetings-and-farewell", member.guild).send(embed)
 });
 
 // Deleted Logs
