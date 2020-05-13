@@ -179,7 +179,7 @@ bot.on("guildMemberRemove", member => {
     .setTitle("Goodbye," + member.use.username + "!")
     .setDescription(member.user.username + ", has left the server\nRoles : " + roles.trim())
     .setColor(0x00ff00);
-  getChannel("greetings-and-farewell", member.guild).send(embed)
+  getChannel("greetings-and-farewell", member.guild).send(embed);
   }
 });
 
