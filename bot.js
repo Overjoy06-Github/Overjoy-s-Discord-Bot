@@ -166,7 +166,7 @@ bot.on("message", msg => {
 bot.on("guildMemberAdd", member => {
   let embed = new Discord.MessageEmbed()
     .setTitle("Welcome," + member.user.username + "!")
-    .setDescription(member.user.username + ", has joined the server!)
+    .setDescription(member.user.username + ", has joined the server!")
     .setColor(0x00ff00);
   getChannel("greetings-and-farewell", member.guild).send(embed)
 });
