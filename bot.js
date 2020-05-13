@@ -170,7 +170,7 @@ bot.on("guildMemberAdd", member => {
 });
 
 bot.on("guildMemberRemove", member => {
-  let roles = ""
+  let roles = "";
   member.roles.cache
     .filter(role => role.name !== "@everyone")
     .each(role => {
