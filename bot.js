@@ -170,7 +170,7 @@ bot.on("guildMemberAdd", member => {
 });
 
 bot.on("guildMemberRemove", member => {
-  let roles = "";
+  let roles = ""
   member.roles.cache
     .filter(role => role.name !== "@everyone")
     .each(role => {
@@ -180,6 +180,7 @@ bot.on("guildMemberRemove", member => {
     .setDescription(member.user.username + ", has left the server\nRoles : " + roles.trim())
     .setColor(0x00ff00);
   getChannel("greetings-and-farewell", member.guild).send(embed)
+  }
 });
 
 // Deleted Logs
