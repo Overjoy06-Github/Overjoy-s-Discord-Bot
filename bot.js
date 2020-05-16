@@ -52,7 +52,7 @@ cmds.profile = (msg, args) => {
 cmds.help = msg => {
   let embed = new Discord.MessageEmbed()
     .setTitle("Help :speech_balloon:")
-    .setDescription("Commands : \n\n`r!help` - Shows This Embed Message\n`r!profile <player_name>` - Shows The Roles of The Person and Shows Their Profile Picture\n\n**Mod Commands**\n\n`r!kick <player_name>` - Kicks Person\n`r!ban <player_name>` - Bans Person\n`r!nickname <player_name> <nickname>` - Changes The Person's Nickname.")
+    .setDescription("Commands : \n\n`r!help` - Shows This Embed Message\n`r!profile <player_name>` - Shows The Roles of The Person and Shows Their Profile Picture\n`r!8ball` - Ask 8ball a question and it will answer your question.\n\n**Mod Commands**\n\n`r!kick <player_name>` - Kicks Person\n`r!ban <player_name>` - Bans Person\n`r!nickname <player_name> <nickname>` - Changes The Person's Nickname.")
     .setColor(0x00ff00);
   
   getChannel(msg.channel.name, msg.guild).send(embed);
@@ -107,6 +107,19 @@ cmds.mute = (msg, args) => {
   }
 };
 
+cmds["8ball"] = (msg) => {
+  let random = ["Yes", "No", "What do you think? NO", "Maybe", "Never", "Couldn't agree more", "Of course not", "Of course", "Ask me later", "Ask me again", "Only an idiot would agree", "Can't say i agree"];
+  let alright = random[Math.floor(Math.random() * random.length)];
+  let channel8 = getChannel(msg.channel.name, msg.guild);
+  let eightembed = new Discord.MessageEmbed()
+    .setColor(0x00ff00)
+    .setTitle(":8ball: 8ball :8ball:")
+    .setDescription(`8ball's answer : **${alright}**`)
+    .setFooter(msg.author.username);
+  
+  channel8.send(eightembed);
+};
+
 cmds.ban = (message, args) => {
   if (!message.guild) return;
 
@@ -143,7 +156,6 @@ cmds.ban = (message, args) => {
 
 bot.on("ready", async () => {
   console.log(`${bot.user.username} is online!`);
-  bot.user.setActivity('r!help', { type: 'STREAMING' });
 });
 
 bot.on("message", msg => {
@@ -164,26 +176,17 @@ bot.on("message", msg => {
 
 // Welcome and Bye Logs
 bot.on("guildMemberAdd", member => {
-  let embed = new Discord.MessageEmbed()
-    .setTitle("Welcome," + member.user.username + "!")
-    .setDescription(member.user.username + ", has joined the server!")
-    .setColor(0x00ff00);
-  getChannel("greetings-and-farewell", member.guild).send(embed)
+  getChannel("greetings-and-farewell", member.guild).send(
+    "**" + member.user.username + "**, has joined the server!"
+  );
 });
 
 bot.on("guildMemberRemove", member => {
-  let roles = ""
-  member.roles.cache
-    .filter(role => role.name !== "@everyone")
-    .each(role => {
-      roles += role.toString() + "\n";
-   })
-  let embed = new Discord.MessageEmbed()
-    .setTitle("Goodbye," + member.user.username + "!")
-    .setDescription(member.user.username + ", has left the server\nRoles : " + roles.trim())
-    .setColor(0xff0000);
-  getChannel("greetings-and-farewell", member.guild).send(embed)
+  getChannel("greetings-and-farewell", member.guild).send(
+    "**" + member.user.username + "**, has left the server!"
+  );
 });
+
 // Deleted Logs
 bot.on("messageDelete", async message => {
   if (message.author.bot) return;
