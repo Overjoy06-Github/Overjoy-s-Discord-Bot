@@ -1,6 +1,9 @@
 const dotenv = require("dotenv").config();
 const botconfig = require("./botconfig.json");
 const Discord = require("discord.js");
+const api = require('imageapi.js');
+const superagent = require('superagent')
+
 
 const bot = new Discord.Client({ disableEveryone: true });
 const prefix = botconfig.prefix;
@@ -15,6 +18,57 @@ let cmds = {};
 
 cmds.ping = msg => {
   msg.reply("Pong!");
+};
+
+cmds.meme = async (msg) => {
+  let subreddits = [
+    "comedyheaven",
+    "dankmeme",
+    "animemes",
+    "memes",
+    "meme",
+    "MemeEconomy",
+    "Memes_Of_The_Dank"
+  ]
+  let subreddit = subreddits[Math.floor(Math.random() * subreddits.length - 1)]
+  console.log(subreddit)
+  let img = await api(subreddit)
+  console.log(img)
+  if(!{img}) return msg.reply('I broke please try again!')
+  let Embed = new Discord.MessageEmbed()
+    .setTitle(`A meme from r/${subreddit}`)
+    .setURL(`https://reddit.com/r/${subreddit}`)
+    .setColor(0x00ff00)
+    .setImage(img)
+  
+    getChannel(msg.channel.name, msg.guild).send(Embed);  
+};
+
+cmds.dog = async (msg) => {
+  let {body} = await superagent
+    .get('https://dog.ceo/api/breeds/image/random')
+  
+  if(!{body}) return msg.reply('It broke... Please Try Again')
+  let embed = new Discord.MessageEmbed()
+    .setColor(0x00ff00)
+    .setTitle('Here a cute doggo!')
+    .setImage(body.message)
+    .setTimestamp()
+
+    getChannel(msg.channel.name, msg.guild).send({embed})
+};
+
+cmds.cat = async (msg) => {
+  let {body} = await superagent
+  .get('https://aws.random.cat/meow')
+  if(!{body}) return msg.reply('I broke... Please try again!')
+  let embed = new Discord.MessageEmbed()
+    .setColor(0x00ff00)
+    .setTitle('Heres a cute little kitty!')
+    .setImage(body.file)
+    .setTimestamp()
+  
+    getChannel(msg.channel.name, msg.guild).send({embed})
 };
 
 cmds.profile = (msg, args) => {
@@ -52,7 +106,7 @@ cmds.profile = (msg, args) => {
 cmds.help = msg => {
   let embed = new Discord.MessageEmbed()
     .setTitle("Help :speech_balloon:")
-    .setDescription("Commands : \n\n`r!help` - Shows This Embed Message\n`r!profile <player_name>` - Shows The Roles of The Person and Shows Their Profile Picture\n`r!8ball` - Ask 8ball a question and it will answer your question.\n\n**Mod Commands**\n\n`r!kick <player_name>` - Kicks Person\n`r!ban <player_name>` - Bans Person\n`r!nickname <player_name> <nickname>` - Changes The Person's Nickname.")
+    .setDescription("**Commands** : \n\n`r!help` - Shows This Embed Message\n`r!profile <player_name>` - Shows The Roles of The Person and Shows Their Profile Picture\n`r!8ball` - Ask 8ball a question and it will answer your question.\n`r!meme` - Generates a random meme.\n`r!dog` - Generates a random dog image.\n`r!cat` - Gemerates a random cat image.\n\n**Mod Commands**\n\n`r!kick <player_name>` - Kicks Person\n`r!ban <player_name>` - Bans Person\n`r!nickname <player_name> <nickname>` - Changes The Person's Nickname.")
     .setColor(0x00ff00);
   
   getChannel(msg.channel.name, msg.guild).send(embed);
