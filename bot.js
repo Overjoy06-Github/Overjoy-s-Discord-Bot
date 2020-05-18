@@ -98,6 +98,7 @@ cmds.profile = (msg, args) => {
     .setThumbnail(user.displayAvatarURL())
     .setDescription(`${member} [${displayName}]`)
     .addField("Roles", roles.trim() == "" ? "No roles" : roles)
+    .addField("Joined At : ", msg.member.joinedAt)
     .setColor(0xccff00);
 
   getChannel(msg.channel.name, msg.guild).send(embed);
