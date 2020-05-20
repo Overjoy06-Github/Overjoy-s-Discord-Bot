@@ -48,13 +48,13 @@ cmds.avatar = async (msg, args) => {
   let embed = new Discord.MessageEmbed()
   if(!msg.mentions.users.first()){
    embed.setTitle(`${msg.author.username}'s Avatar!`)
-   embed.setThumbnail(msg.author.displayAvatarURL())
+   embed.setImage(msg.author.displayAvatarURL())
    embed.setColor(0x00ff00);
     
   }else{
       let user = msg.mentions.users.first()
       embed.setTitle(`${user.username}'s Avatar!`)
-      embed.setThumbnail(user.displayAvatarURL())
+      embed.setImage(user.displayAvatarURL())
       embed.setColor(0x00ff00);
     
   }
