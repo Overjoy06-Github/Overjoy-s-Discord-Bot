@@ -233,7 +233,7 @@ bot.on("message", msg => {
   if (msg.author.bot) return;
   if (msg.channel.type == "dm") return;
 
-  if (msg.content.startsWith(prefix)) {
+  if (msg.content.startsWith(prefix) || msg.content.startsWith(prefix.toUpperCase())) {
     let cmdData = msg.content
       .substring(prefix.length)
       .replace(/\s+/g, " ")
