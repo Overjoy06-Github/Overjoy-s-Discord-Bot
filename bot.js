@@ -44,6 +44,25 @@ cmds.meme = async (msg) => {
     getChannel(msg.channel.name, msg.guild).send(Embed);  
 };
 
+cmds.avatar = async (msg, args) => {
+  let embed = new Discord.MessageEmbed()
+  if(!msg.mentions.users.first()){
+   embed.setTitle(`${msg.author.username}'s Avatar!`)
+   embed.setThumbnail(msg.author.displayAvatarURL())
+   embed.setColor(0x00ff00);
+    
+      getChannel(msg.channel.name, msg.guild).send(embed);
+  }else{
+      let user = msg.mentions.users.first()
+      embed.setTitle(`${user.username}'s Avatar!`)
+      embed.setThumbnail(user.displayAvatarURL())
+      embed.setColor(0x00ff00);
+    
+      getChannel(msg.channel.name, msg.guild).send(embed)
+  }
+  getChannel(msg.channel.name, msg.guild).send(embed)
+};
+
 cmds.dog = async (msg) => {
   let {body} = await superagent
     .get('https://dog.ceo/api/breeds/image/random')
@@ -98,7 +117,6 @@ cmds.profile = (msg, args) => {
     .setThumbnail(user.displayAvatarURL())
     .setDescription(`${member} [${displayName}]`)
     .addField("Roles", roles.trim() == "" ? "No roles" : roles)
-    .addField("Joined At : ", msg.member.joinedAt)
     .setColor(0xccff00);
 
   getChannel(msg.channel.name, msg.guild).send(embed);
