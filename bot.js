@@ -51,14 +51,12 @@ cmds.avatar = async (msg, args) => {
    embed.setThumbnail(msg.author.displayAvatarURL())
    embed.setColor(0x00ff00);
     
-      getChannel(msg.channel.name, msg.guild).send(embed);
   }else{
       let user = msg.mentions.users.first()
       embed.setTitle(`${user.username}'s Avatar!`)
       embed.setThumbnail(user.displayAvatarURL())
       embed.setColor(0x00ff00);
     
-      getChannel(msg.channel.name, msg.guild).send(embed)
   }
   getChannel(msg.channel.name, msg.guild).send(embed)
 };
