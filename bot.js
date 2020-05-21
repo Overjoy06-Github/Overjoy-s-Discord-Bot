@@ -219,16 +219,6 @@ cmds["8ball"] = msg => {
   channel8.send(eightembed);
 };
 
-cmds.ass = msg => {
-  let channel = getChannel("self-role", msg.guild);
-  let embed = new Discord.MessageEmbed()
-    .setColor(0x00ff00)
-    .setTitle("What Game Do You Mainly Play?")
-    .setDescription("<:roblox:712556824599199785> - Roblox");
-
-  channel.send(embed).catch();
-};
-
 cmds.ban = (message, args) => {
   if (!message.guild) return;
 
@@ -271,13 +261,15 @@ cmds.updateSelfRole = msg => {
     return;
   let embed = new Discord.MessageEmbed({
     title: "Self role",
-    description: `<:roblox:712556824599199785> <@&705257970472321094>`,
+    description: `**What Game Do You Mainly Play?**\n<:roblox:712556824599199785> - <@&705257970472321094>\n\n**What Gender Are You?**\nMale♂️ - <@&705258031755034700>\nFemale♀️ - <@&705258051795550238>`,
     color: 0x00ff00
   });
 
   msg.channel.messages.fetch("712591159284727810").then(emsg => {
     emsg.edit(embed);
-    emsg.react("712556824599199785");
+    emsg.react("712556824599199785") // roblox
+    emsg.react("712866484644479086") // male
+    emsg.react("712866515690455110") // female
   });
 };
 
@@ -310,6 +302,9 @@ bot.on("message", msg => {
 bot.on("guildMemberAdd", member => {
   getChannel("greetings-and-farewell", member.guild).send(
     "**" + member.user.username + "**, has joined the server!"
+  );
+  getChannel("general", member.guild).send(
+    "**" + member.user.username + "**Please head on to #self-role to select your roles!"
   );
 });
 
@@ -373,7 +368,9 @@ bot.on("messageReactionAdd", async (reaction, user) => {
   if (reaction.message.id == "712591159284727810" && reaction.me) {
     let guild = bot.guilds.cache.find(g => g.id == "691609473252458546");
     let reactionActions = {
-      "712556824599199785": getRole("Roblox", guild)
+      "712556824599199785": getRole("Roblox", guild),
+      "712866484644479086": getRole("Male", guild),
+      "712866515690455110": getRole("Female", guild)
     };
     if (reactionActions[reaction.emoji.id])
       guild.member(user).roles.add(reactionActions[reaction.emoji.id]);
@@ -394,7 +391,9 @@ bot.on("messageReactionRemove", async (reaction, user) => {
   if (reaction.message.id == "712591159284727810" && reaction.me) {
     let guild = bot.guilds.cache.find(g => g.id == "691609473252458546");
     let reactionActions = {
-      "712556824599199785": getRole("Roblox", guild)
+      "712556824599199785": getRole("Roblox", guild),
+      "712866484644479086": getRole("Male", guild),
+      "712866515690455110": getRole("Female", guild)
     };
     if (reactionActions[reaction.emoji.id])
       guild.member(user).roles.remove(reactionActions[reaction.emoji.id]);
