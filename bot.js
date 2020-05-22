@@ -3,6 +3,7 @@ const botconfig = require("./botconfig.json");
 const Discord = require("discord.js");
 const api = require("imageapi.js");
 const superagent = require("superagent");
+const snekfetch = require('snekfetch');
 
 const bot = new Discord.Client({
   disableEveryone: true,
@@ -22,28 +23,63 @@ cmds.ping = msg => {
   msg.reply("Pong!");
 };
 
-cmds.meme = async msg => {
-  let subreddits = [
+cmds.meme = async(msg, args) => {
+    let subreddits = [
     "comedyheaven",
     "dankmeme",
-    "animemes",
+    "unpopularopinion",
+    "wholesomememes",
+    "comedyhomicide",
+    "dndmemes",
+    "minecraftmemes",
+    "cringetopia",
+    "PrequelMemes",
+    "HistoryMemes",
+    "OutOfTheLoop",
+    "dankchristianmemes",
+    "4PanelCringe",
     "memes",
     "meme",
     "MemeEconomy",
     "Memes_Of_The_Dank"
   ];
   let subreddit = subreddits[Math.floor(Math.random() * subreddits.length - 1)];
-  console.log(subreddit);
-  let img = await api(subreddit);
-  console.log(img);
-  if (!{ img }) return msg.reply("I broke please try again!");
-  let Embed = new Discord.MessageEmbed()
-    .setTitle(`A meme from r/${subreddit}`)
-    .setURL(`https://reddit.com/r/${subreddit}`)
-    .setColor(0x00ff00)
-    .setImage(img);
+      try {
+        const { body } = await snekfetch
+            .get(`https://www.reddit.com/r/${subreddit}.json?sort=top&t=week`)
+            .query({ limit: 800 });
+        const allowed = msg.channel.nsfw ? body.data.children : body.data.children.filter(post => !post.data.over_18);
+        if (!allowed.length) return msg.channel.send('It seems we are out of fresh memes!, Try again later.');
+        const randomnumber = Math.floor(Math.random() * allowed.length)
+        let embed = new Discord.MessageEmbed()
+        .setColor(0x00ff00)
+        .setTitle(allowed[randomnumber].data.title)
+        .setImage(allowed[randomnumber].data.url)
+        .setDescription(`From the subreddit r/${subreddit}`)
+        .setFooter("👍" + allowed[randomnumber].data.ups + "💬" + allowed[randomnumber].data.num_comments)
+        msg.channel.send(embed)
+        console.log(allowed[randomnumber].data.url);
+    } catch (err) {
+        return console.log(err);
+    }
+};
 
-  getChannel(msg.channel.name, msg.guild).send(Embed);
+cmds.qotd = async(msg, args) => {
+      try {
+        const { body } = await snekfetch
+            .get('https://www.reddit.com/r/askReddit.json?sort=top&t=week')
+            .query({ limit: 800 });
+        const allowed = msg.channel.nsfw ? body.data.children : body.data.children.filter(post => !post.data.over_18);
+        if (!allowed.length) return msg.channel.send('It seems we are out of fresh memes!, Try again later.');
+        const randomnumber = Math.floor(Math.random() * allowed.length)
+        let embed = new Discord.MessageEmbed()
+        .setColor(0x00ff00)
+        .setTitle(allowed[randomnumber].data.title)
+        .setFooter("👍" + allowed[randomnumber].data.ups + "💬" + allowed[randomnumber].data.num_comments)
+        msg.channel.send(embed)
+    } catch (err) {
+        return console.log(err);
+    }
 };
 
 cmds.avatar = async (msg, args) => {
