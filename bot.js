@@ -27,17 +27,11 @@ cmds.meme = async(msg, args) => {
     let subreddits = [
     "comedyheaven",
     "dankmeme",
-    "unpopularopinion",
     "wholesomememes",
-    "comedyhomicide",
-    "dndmemes",
     "minecraftmemes",
-    "cringetopia",
     "PrequelMemes",
     "HistoryMemes",
-    "OutOfTheLoop",
     "dankchristianmemes",
-    "4PanelCringe",
     "memes",
     "meme",
     "MemeEconomy",
@@ -59,6 +53,7 @@ cmds.meme = async(msg, args) => {
         .setFooter("👍" + allowed[randomnumber].data.ups + "💬" + allowed[randomnumber].data.num_comments)
         msg.channel.send(embed)
         console.log(allowed[randomnumber].data.url);
+          if(!embed) return msg.channel.send('The bot broke... Please Try again.');
     } catch (err) {
         return console.log(err);
     }
