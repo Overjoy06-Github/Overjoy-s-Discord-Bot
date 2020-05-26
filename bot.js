@@ -98,8 +98,7 @@ cmds.question = async(msg, args) => {
     .setColor(0x00ff00)
     .setFooter(`Created By : ${msg.author.username}`)
     
-  getChannel("qotd-and-polls", msg.guild).send(embed);
-  getChannel("qotd-answers", msg.guild).send(embed);
+  getChannel("qotd", msg.guild).send(embed);
   msg.delete();
 };
 
