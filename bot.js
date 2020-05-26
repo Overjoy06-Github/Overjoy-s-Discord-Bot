@@ -10,7 +10,12 @@ const bot = new Discord.Client({
   partials: ["REACTION", "MESSAGE"]
 });
 const prefix = botconfig.prefix;
-
+const activities_list = [
+    "with the r!help command.", 
+    "Minecraft",
+    "Roblox", 
+    "with Seniru"
+    ];
 /** Helpful functions*/
 const getRole = (role, guild) => guild.roles.cache.find(r => r.name === role);
 const getChannel = (channel, guild) =>
@@ -20,8 +25,29 @@ const getChannel = (channel, guild) =>
 let cmds = {};
 
 cmds.ping = msg => {
-  msg.reply("Pong!");
-};
+  msg.channel.send("P").then((pong) => {
+    setTimeout (() => {pong.edit("Po")}, 1000),
+    setTimeout (() => {pong.edit("Pon")}, 1000),
+    setTimeout (() => {pong.edit("Pong")}, 1000),
+    setTimeout (() => {pong.edit("Pong,")}, 1000),
+    setTimeout (() => {pong.edit("Pong, S")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Se")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Sen")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seni")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Senir")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru i")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is r")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is re")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is ret")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is reta")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is retar")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is retard")}, 1000);
+    setTimeout (() => {pong.edit("Pong, Seniru is retarde")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is retarded")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is retarded!")}, 1000);
+  })};
 
 cmds.rps = async(message, args) => {
 let rps = ["scissors", "paper", "rock"];
@@ -400,6 +426,10 @@ cmds.updateSelfRole = msg => {
 
 bot.on("ready", async () => {
   console.log(`${bot.user.username} is online!`);
+      setInterval(() => {
+        const index = Math.floor(Math.random() * (activities_list.length - 1) + 1); 
+        bot.user.setActivity(activities_list[index]);
+    }, 10000);
 });
 
 bot.on("message", msg => {
