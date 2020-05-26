@@ -23,6 +23,32 @@ cmds.ping = msg => {
   msg.reply("Pong!");
 };
 
+cmds.purge = async(msg,args) => {
+  if (msg.deletable) {
+    msg.delete();
+  }
+  
+  if (!msg.member.hasPermission(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
+    return msg.reply("You can't delete messages...").then(m => m.delete(5000));
+  }
+  
+  if(isNaN(args[0]) || parseInt(args[0]) <= 0) {
+    return msg.reply("That isn't a number, Please try again.").then(msg => msg.delete(5000));
+  }
+  
+  let deleteAmount;
+  
+  if (parseInt(args[0]) > 100) {
+    deleteAmount = 100;
+  } else {
+    deleteAmount = parseInt(args[0]);
+  }
+  
+  msg.channel.bulkDelete(deleteAmount, true)
+    .then(deleted => msg.channel.send(`I deleted ${deleted.size} messages.`))
+    .catch(err => msg.reply(`Something went wrong... ${err}`));
+};
+
 cmds.meme = async(msg, args) => {
     let subreddits = [
     "comedyheaven",
@@ -39,6 +65,7 @@ cmds.meme = async(msg, args) => {
   ];
   let subreddit = subreddits[Math.floor(Math.random() * subreddits.length - 1)];
       try {
+        const description = "";
         const { body } = await snekfetch
             .get(`https://www.reddit.com/r/${subreddit}.json?sort=top&t=week`)
             .query({ limit: 800 });
@@ -47,9 +74,8 @@ cmds.meme = async(msg, args) => {
         const randomnumber = Math.floor(Math.random() * allowed.length)
         let embed = new Discord.MessageEmbed()
         .setColor(0x00ff00)
-        .setTitle(allowed[randomnumber].data.title)
+        .setDescription(`${description}\n[${allowed[randomnumber].data.title}](${allowed[randomnumber].data.url})`)
         .setImage(allowed[randomnumber].data.url)
-        .setDescription(`From the subreddit r/${subreddit}`)
         .setFooter("👍" + allowed[randomnumber].data.ups + "💬" + allowed[randomnumber].data.num_comments)
         msg.channel.send(embed)
         console.log(allowed[randomnumber].data.url);
@@ -57,6 +83,24 @@ cmds.meme = async(msg, args) => {
     } catch (err) {
         return console.log(err);
     }
+};
+
+cmds.question = async(msg, args) => {
+  let qotd = args[0];
+  let question = args.splice(1).join(" ")
+  if (!msg.member.hasPermission(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
+    return msg.reply("You can't use this command...");
+  }
+  
+  let embed = new Discord.MessageEmbed()
+    .setTitle("QOTD #" + qotd)
+    .setDescription(question)
+    .setColor(0x00ff00)
+    .setFooter(`Created By : ${msg.author.username}`)
+    
+  getChannel("qotd-and-polls", msg.guild).send(embed);
+  getChannel("qotd-answers", msg.guild).send(embed);
+  msg.delete();
 };
 
 cmds.qotd = async(msg, args) => {
@@ -75,6 +119,27 @@ cmds.qotd = async(msg, args) => {
     } catch (err) {
         return console.log(err);
     }
+};
+
+cmds.reddit = async(msg, args) => {
+  try {
+    args.join(" ")
+    const { body } = await snekfetch
+      .get("https://www.reddit.com/r/" + args[0] + ".json?sort=top&t=week")
+      .query({ limit: 800});
+    const allowed = msg.channel.nsfw ? body.data.children : body.data.children.filter(post => !post.data.over_18);
+    if (!allowed.length) return msg.channel.send('It seems we are at our limit!, Try again later.');
+    const randomnumber = Math.floor(Math.random() * allowed.length)
+    let embed = new Discord.MessageEmbed()
+      .setColor(0x00ff00)
+      .setTitle(allowed[randomnumber].data.title)
+      .setImage(allowed[randomnumber].data.url)
+      .setDescription(args[0])
+      .setFooter("👍" + allowed[randomnumber].data.ups + "💬" + allowed[randomnumber].data.num_comments)
+    msg.channel.send(embed)
+  } catch (err) {
+      return console.log(err);
+  }
 };
 
 cmds.avatar = async (msg, args) => {
@@ -155,7 +220,7 @@ cmds.help = msg => {
   let embed = new Discord.MessageEmbed()
     .setTitle("Help :speech_balloon:")
     .setDescription(
-      "**Commands** : \n\n`r!help` - Shows This Embed Message\n`r!profile <player_name>` - Shows The Roles of The Person and Shows Their Profile Picture\n`r!8ball` - Ask 8ball a question and it will answer your question.\n`r!meme` - Generates a random meme.\n`r!dog` - Generates a random dog image.\n`r!cat` - Gemerates a random cat image.\n`r!avatar <player_name>` - Shows the person's avatar\n\n**Mod Commands**\n\n`r!kick <player_name>` - Kicks Person\n`r!ban <player_name>` - Bans Person\n`r!nickname <player_name> <nickname>` - Changes The Person's Nickname."
+      "**Commands** : \n\n`r!help` - Shows This Embed Message\n`r!profile <player_name>` - Shows The Roles of The Person and Shows Their Profile Picture\n`r!8ball` - Ask 8ball a question and it will answer your question.\n`r!meme` - Generates a random meme.\n`r!dog` - Generates a random dog image.\n`r!cat` - Gemerates a random cat image.\n`r!avatar <player_name>` - Shows the person's avatar\n\n**Mod Commands**\n\n`r!kick <player_name>` - Kicks Person\n`r!ban <player_name>` - Bans Person\n`r!nickname <player_name> <nickname>` - Changes The Person's Nickname.\n`r!purge <amount>` - Deletes all the previous messages depending on the amount.`"
     )
     .setColor(0x00ff00);
 
