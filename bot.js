@@ -27,26 +27,9 @@ let cmds = {};
 cmds.ping = msg => {
   msg.channel.send("P").then((pong) => {
     setTimeout (() => {pong.edit("Po")}, 1000),
-    setTimeout (() => {pong.edit("Pon")}, 1000),
-    setTimeout (() => {pong.edit("Pong")}, 1000),
-    setTimeout (() => {pong.edit("Pong,")}, 1000),
-    setTimeout (() => {pong.edit("Pong, S")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Se")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Sen")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seni")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Senir")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru i")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is r")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is re")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is ret")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is reta")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is retar")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is retard")}, 1000);
-    setTimeout (() => {pong.edit("Pong, Seniru is retarde")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is retarded")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is retarded!")}, 1000);
+    setTimeout (() => {pong.edit("Pon")}, 2000),
+    setTimeout (() => {pong.edit("Pong")}, 3000),
+    setTimeout (() => {pong.edit("Pong!")}, 4000)
   })};
 
 cmds.rps = async(message, args) => {
