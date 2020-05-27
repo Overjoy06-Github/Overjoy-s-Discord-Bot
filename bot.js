@@ -27,9 +27,26 @@ let cmds = {};
 cmds.ping = msg => {
   msg.channel.send("P").then((pong) => {
     setTimeout (() => {pong.edit("Po")}, 1000),
-    setTimeout (() => {pong.edit("Pon")}, 2000),
-    setTimeout (() => {pong.edit("Pong")}, 3000),
-    setTimeout (() => {pong.edit("Pong!")}, 4000)
+    setTimeout (() => {pong.edit("Pon")}, 1000),
+    setTimeout (() => {pong.edit("Pong")}, 1000),
+    setTimeout (() => {pong.edit("Pong,")}, 1000),
+    setTimeout (() => {pong.edit("Pong, S")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Se")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Sen")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seni")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Senir")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru i")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is r")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is re")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is ret")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is reta")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is retar")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is retard")}, 1000);
+    setTimeout (() => {pong.edit("Pong, Seniru is retarde")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is retarded")}, 1000),
+    setTimeout (() => {pong.edit("Pong, Seniru is retarded!")}, 1000);
   })};
 
 cmds.rps = async(message, args) => {
@@ -87,6 +104,9 @@ cmds.purge = async(msg,args) => {
 };
 
 cmds.meme = async(msg, args) => {
+  if(msg.channel.name !== '🐸memes') {
+    return msg.reply("Please go to <#710142280484257856>")
+  }
     let subreddits = [
     "comedyheaven",
     "dankmeme",
@@ -157,6 +177,40 @@ cmds.qotd = async(msg, args) => {
     }
 };
 
+cmds.suggest = async(msg, args) => {
+  if (msg.channel.name !== 'suggestions') {
+    return msg.reply("Wrong Channel. Please go to <#699970320081354782> to suggest an idea of yours.")
+  }
+  
+  let poll = args.splice(0).join(" ")
+  let embed = new Discord.MessageEmbed()
+    .setColor(0x00ff00)
+    .setDescription(poll)
+
+  getChannel("polls-approval", msg.guild).send(embed).then(embedMessage => {
+      embedMessage.react("👍")
+      embedMessage.react("👎")
+  });
+bot.on('messageReactionAdd', (reaction, user) => {
+        let message = reaction.message, emoji = reaction.emoji;
+        if (reaction.message.channel.name === "polls-approval" && reaction.me) {
+          if (emoji.name == '👍') {
+            if(reaction.count > 1) {
+              getChannel("📜polls", msg.guild).send(embed);
+              console.log("yas queen")
+            }
+          } else {
+            if (emoji.name == '👎') {
+              if(reaction.count > 1) {
+                getChannel("📜polls", msg.guild).send(embed);
+                console.log("nah")
+              }
+            }
+        }
+      }
+ });
+};
+                                                           
 cmds.reddit = async(msg, args) => {
   try {
     args.join(" ")
@@ -436,16 +490,16 @@ bot.on("message", msg => {
 
 // Welcome and Bye Logs
 bot.on("guildMemberAdd", member => {
-  getChannel("greetings-and-farewell", member.guild).send(
+  getChannel("👋welcome", member.guild).send(
     "**" + member.user.username + "**, has joined the server!"
   );
-  getChannel("general", member.guild).send(
-    "**" + member.user.username + "**Please head on to #self-role to select your roles!"
+  getChannel("💬general", member.guild).send(
+    "**" + member.user.username + "** Please head on to #self-role to select your roles!"
   );
 });
 
 bot.on("guildMemberRemove", member => {
-  getChannel("greetings-and-farewell", member.guild).send(
+  getChannel("👋welcome", member.guild).send(
     "**" + member.user.username + "**, has left the server!"
   );
 });
