@@ -215,7 +215,7 @@ cmds.reddit = async(msg, args) => {
   try {
     args.join(" ")
     const { body } = await snekfetch
-      .get("https://www.reddit.com/r/" + args[0] + ".json?sort=top&t=week")
+      .get("https://www.reddit.com/r/"+args[0]+".json?sort=top&t=week")
       .query({ limit: 800});
     const allowed = msg.channel.nsfw ? body.data.children : body.data.children.filter(post => !post.data.over_18);
     if (!allowed.length) return msg.channel.send('It seems we are at our limit!, Try again later.');
