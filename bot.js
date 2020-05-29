@@ -20,9 +20,32 @@ const activities_list = [
 const getRole = (role, guild) => guild.roles.cache.find(r => r.name === role);
 const getChannel = (channel, guild) =>
   guild.channels.cache.find(c => c.name === channel);
-
 /** Main commands*/
 let cmds = {};
+
+cmds.nothing = msg => {
+  msg.channel.send('nothing to see here')
+    .then(m => {
+        m.react('🖤')
+        m.react('⚫')
+        m.react('⬛')
+        m.react('◾')
+        m.react('◼️')
+        m.react('▪️')
+        m.react('✴️')
+        m.react('🏴')
+        m.react('🇫')
+        m.react('🇺')
+        m.react('🇨')
+        m.react('🇰')
+        m.react('🇾')
+        m.react("🇴")
+        m.react("🇻")
+        m.react('❗')
+        m.react('❕')
+     });
+
+}
 
 cmds.ping = msg => {
   msg.channel.send("P").then((pong) => {
@@ -324,7 +347,7 @@ cmds.help = msg => {
   let embed = new Discord.MessageEmbed()
     .setTitle("Help :speech_balloon:")
     .setDescription(
-      "**Commands** : \n\n`r!help` - Shows This Embed Message\n`r!profile <player_name>` - Shows The Roles of The Person and Shows Their Profile Picture\n`r!8ball` - Ask 8ball a question and it will answer your question.\n`r!meme` - Generates a random meme.\n`r!dog` - Generates a random dog image.\n`r!cat` - Gemerates a random cat image.\n`r!avatar <player_name>` - Shows the person's avatar\n`r!rps <choice>` - Plays a game of rock paper scissors.\n\n**Mod Commands**\n\n`r!kick <player_name>` - Kicks Person\n`r!ban <player_name>` - Bans Person\n`r!nickname <player_name> <nickname>` - Changes The Person's Nickname.\n`r!purge <amount>` - Deletes all the previous messages depending on the amount.`"
+      "**Commands** : \n\n`r!help` - Shows This Embed Message\n`r!profile <player_name>` - Shows The Roles of The Person and Shows Their Profile Picture\n`r!8ball` - Ask 8ball a question and it will answer your question.\n`r!meme` - Generates a random meme.\n`r!dog` - Generates a random dog image.\n`r!cat` - Gemerates a random cat image.\n`r!avatar <player_name>` - Shows the person's avatar\n`r!rps <choice>` - Plays a game of rock paper scissors.\n`r!suggest <suggestion>` - Suggests something and the admins will decide to approve it or not.\n\n**Mod Commands**\n\n`r!kick <player_name>` - Kicks Person\n`r!ban <player_name>` - Bans Person\n`r!nickname <player_name> <nickname>` - Changes The Person's Nickname.\n`r!purge <amount>` - Deletes all the previous messages depending on the amount.`"
     )
     .setColor(0x00ff00);
 
@@ -468,10 +491,15 @@ bot.on("ready", async () => {
     }, 10000);
 });
 
-bot.on("message", msg => {
+bot.on("message", msg => {  
   if (msg.author.bot) return;
   if (msg.channel.type == "dm") return;
-
+  if(msg.content.toLowerCase().includes("no u".toLowerCase())){
+     msg.channel.send("no u");
+  }
+  if (msg.content.toLowerCase().includes("nigger".toLowerCase())) {
+    msg.delete();
+  }
   if (
     msg.content.startsWith(prefix) ||
     msg.content.startsWith(prefix.toUpperCase())
@@ -482,7 +510,7 @@ bot.on("message", msg => {
       .split(" ");
     let cmdName = cmdData[0];
     if (cmds[cmdName]) {
-      cmds[cmdName](msg, cmdData.splice(1));
+      cmds[cmdName](msg, cmdData.splice(1));  
     }
   }
 });
