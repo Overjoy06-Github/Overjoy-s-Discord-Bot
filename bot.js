@@ -104,9 +104,6 @@ cmds.purge = async(msg,args) => {
 };
 
 cmds.meme = async(msg, args) => {
-  if(msg.channel.name !== '🐸memes') {
-    return msg.reply("Please go to <#710142280484257856>")
-  }
     let subreddits = [
     "comedyheaven",
     "dankmeme",
@@ -120,7 +117,7 @@ cmds.meme = async(msg, args) => {
     "MemeEconomy",
     "Memes_Of_The_Dank"
   ];
-  let subreddit = subreddits[Math.floor(Math.random() * subreddits.length - 1)];
+    let subreddit = subreddits[Math.floor(Math.random() * subreddits.length - 1)];
       try {
         const description = "";
         const { body } = await snekfetch
@@ -128,15 +125,16 @@ cmds.meme = async(msg, args) => {
             .query({ limit: 800 });
         const allowed = msg.channel.nsfw ? body.data.children : body.data.children.filter(post => !post.data.over_18);
         if (!allowed.length) return msg.channel.send('It seems we are out of fresh memes!, Try again later.');
+        if(msg.channel.name !== '😂memes') return msg.channel.send('Wrong Channel, Please head on to <#710142280484257856> to use the meme command.');
         const randomnumber = Math.floor(Math.random() * allowed.length)
         let embed = new Discord.MessageEmbed()
         .setColor(0x00ff00)
         .setDescription(`${description}\n[${allowed[randomnumber].data.title}](${allowed[randomnumber].data.url})`)
         .setImage(allowed[randomnumber].data.url)
-        .setFooter("👍" + allowed[randomnumber].data.ups + "💬" + allowed[randomnumber].data.num_comments)
+        .setFooter("👍" + allowed[randomnumber].data.ups + " | 💬" + allowed[randomnumber].data.num_comments);
+
         msg.channel.send(embed)
         console.log(allowed[randomnumber].data.url);
-          if(!embed) return msg.channel.send('The bot broke... Please Try again.');
     } catch (err) {
         return console.log(err);
     }
@@ -184,7 +182,7 @@ cmds.suggest = async(msg, args) => {
   
   let poll = args.splice(0).join(" ")
   let embed = new Discord.MessageEmbed()
-    .setColor(0x00ff00)
+    .setColor(0xFCD420)
     .setDescription(poll)
 
   getChannel("polls-approval", msg.guild).send(embed).then(embedMessage => {
@@ -196,14 +194,30 @@ bot.on('messageReactionAdd', (reaction, user) => {
         if (reaction.message.channel.name === "polls-approval" && reaction.me) {
           if (emoji.name == '👍') {
             if(reaction.count > 1) {
-              getChannel("📜polls", msg.guild).send(embed);
+              let pollsapproved = new Discord.MessageEmbed()
+                .setColor(0x00ff00)
+                .setDescription(poll)
+              
+              getChannel("📜polls", msg.guild).send(pollsapproved);
               console.log("yas queen")
+              message.delete( { embed });
+              let approved = new Discord.MessageEmbed()
+                .setColor(0x00ff00)
+                .setDescription(poll);
+              
+              getChannel("polls-approval", msg.guild).send(approved)
             }
           } else {
             if (emoji.name == '👎') {
               if(reaction.count > 1) {
-                getChannel("📜polls", msg.guild).send(embed);
                 console.log("nah")
+                message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
+                message.delete( { embed });
+                let declined = new Discord.MessageEmbed()
+                  .setColor(0xff0000)
+                  .setDescription(poll);
+                
+                getChannel("polls-approval", msg.guild).send(declined)
               }
             }
         }
@@ -215,7 +229,7 @@ cmds.reddit = async(msg, args) => {
   try {
     args.join(" ")
     const { body } = await snekfetch
-      .get("https://www.reddit.com/r/"+args[0]+".json?sort=top&t=week")
+      .get("https://www.reddit.com/r/" + args[0] + ".json?sort=top&t=week")
       .query({ limit: 800});
     const allowed = msg.channel.nsfw ? body.data.children : body.data.children.filter(post => !post.data.over_18);
     if (!allowed.length) return msg.channel.send('It seems we are at our limit!, Try again later.');
@@ -348,21 +362,6 @@ cmds.nickname = (msg, args) => {
   }
 };
 
-/*cmds.role = msg => {
-  let embed = new Discord.MessageEmbed()
-    .setTitle("Server Roles : ")
-    .setColor(0x00ff00)
-    .setDescription("<:roblox:712556824599199785> - Roblox")
-  
-  msg.channel.send({embed: embed}).then(embedMessage => {
-    embedMessage.react('712556824599199785')
-    .then(console.log)
-    .catch(console.error);
-  });
-};*/
-
-//uff
-
 cmds.kick = msg => {
   if (msg.member.hasPermission(Discord.Permissions.FLAGS.KICK_MEMBERS)) {
     msg.reply("Ok senpai");
@@ -489,19 +488,33 @@ bot.on("message", msg => {
 });
 
 // Welcome and Bye Logs
-bot.on("guildMemberAdd", member => {
-  getChannel("👋welcome", member.guild).send(
-    "**" + member.user.username + "**, has joined the server!"
-  );
-  getChannel("💬general", member.guild).send(
-    "**" + member.user.username + "** Please head on to #self-role to select your roles!"
-  );
+bot.on("guildMemberAdd", async (member, message) => {
+    let embed = new Discord.MessageEmbed()
+      .setTitle(`Welcome ${member.user.username}!`)
+      .setDescription(`**${member.user.username}**, has joined the server!`)
+      .setColor(0x00ff00)
+      .setThumbnail(member.user.displayAvatarURL());
+    
+  getChannel("👋welcome", member.guild).send(embed);
+  let general = getChannel("💬general-chat", member.guild)
+  let generalembed = new Discord.MessageEmbed()
+    .setTitle(`Welcome ${member.user.username} to ${member.guild}!`)
+    .setDescription(`Hello ${member.user.username}! Head over to <#712574265039257611> to get your roles, and head on to <#691623148998885459> to read the rules!`)
+    .setColor(0x00ff00);
+  
+  if (general) {
+  general.send(generalembed);
+  }
 });
 
 bot.on("guildMemberRemove", member => {
-  getChannel("👋welcome", member.guild).send(
-    "**" + member.user.username + "**, has left the server!"
-  );
+    let embed = new Discord.MessageEmbed()
+    .setTitle(`Goodbye ${member.user.username}!`)
+    .setDescription(`**${member.user.username}**, has left the server...`)
+    .setColor(0xff0000)
+    .setThumbnail(member.user.displayAvatarURL());
+  
+  getChannel("👋welcome", member.guild).send(embed);
 });
 
 // Deleted Logs
