@@ -3,7 +3,9 @@ const botconfig = require("./botconfig.json");
 const Discord = require("discord.js");
 const api = require("imageapi.js");
 const superagent = require("superagent");
-const snekfetch = require('snekfetch');
+const snekfetch = require("snekfetch");
+
+const scraper = require("./libs/scraper.js");
 
 const bot = new Discord.Client({
   disableEveryone: true,
@@ -11,11 +13,11 @@ const bot = new Discord.Client({
 });
 const prefix = botconfig.prefix;
 const activities_list = [
-    "with the r!help command.", 
-    "Minecraft",
-    "Roblox", 
-    "with Seniru"
-    ];
+  "with the r!help command.",
+  "Minecraft",
+  "Roblox",
+  "with Seniru"
+];
 /** Helpful functions*/
 const getRole = (role, guild) => guild.roles.cache.find(r => r.name === role);
 const getChannel = (channel, guild) =>
@@ -23,111 +25,204 @@ const getChannel = (channel, guild) =>
 /** Main commands*/
 let cmds = {};
 
-cmds.nothing = msg => {
-  msg.channel.send('nothing to see here')
-    .then(m => {
-        m.react('🖤')
-        m.react('⚫')
-        m.react('⬛')
-        m.react('◾')
-        m.react('◼️')
-        m.react('▪️')
-        m.react('✴️')
-        m.react('🏴')
-        m.react('🇫')
-        m.react('🇺')
-        m.react('🇨')
-        m.react('🇰')
-        m.react('🇾')
-        m.react("🇴")
-        m.react("🇻")
-        m.react('❗')
-        m.react('❕')
-     });
+cmds.robloxprofile = async (msg, args) => {
+  let name = args[0];
 
-}
+  /**
+    if(!args) {
+      msg.channel.send("Please enter a valid username!")
+    }
+    */
+  console.log(name);
+  scraper.scrapeHTTPS(
+    `https://api.roblox.com/users/get-by-username?username=${name}`,
+    chunk => {
+      let data = JSON.parse(chunk);
+      scraper.scrapeHTTPS(`https://www.roblox.com/users/profile/robloxcollections-json?userId=${data.Id}`, console.log)
+      scraper.scrapeHTTPS(
+        `https://api.roblox.com/users/${data.Id}/groups`,
+        group => {
+          let clan = JSON.parse(group).length;
+      scraper.scrapeHTTPS(
+        `https://api.roblox.com/users/${data.Id}/friends`,
+        friends => {
+          let friendCount = JSON.parse(friends).length;
+          let embed = new Discord.MessageEmbed({
+            title: `${data.Username}'s Profile!`,
+            thumbnail: {
+              url: `http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=${name}`
+            },
+            description: `ID: ${data.Id}\nUsername: ${data.Username}\nOnline: ${data.IsOnline}\nFriends: ${friendCount}\nGroup: ${clan}`,
+            color: 0x00ff00
+          });
+          msg.channel.send(embed);
+        });
+        });
+    });
+};
+
+cmds.nothing = msg => {
+  msg.channel.send("nothing to see here").then(m => {
+    m.react("🖤");
+    m.react("⚫");
+    m.react("⬛");
+    m.react("◾");
+    m.react("◼️");
+    m.react("▪️");
+    m.react("✴️");
+    m.react("🏴");
+    m.react("🇫");
+    m.react("🇺");
+    m.react("🇨");
+    m.react("🇰");
+    m.react("🇾");
+    m.react("🇴");
+    m.react("🇻");
+    m.react("❗");
+    m.react("❕");
+  });
+};
 
 cmds.ping = msg => {
-  msg.channel.send("P").then((pong) => {
-    setTimeout (() => {pong.edit("Po")}, 1000),
-    setTimeout (() => {pong.edit("Pon")}, 1000),
-    setTimeout (() => {pong.edit("Pong")}, 1000),
-    setTimeout (() => {pong.edit("Pong,")}, 1000),
-    setTimeout (() => {pong.edit("Pong, S")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Se")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Sen")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seni")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Senir")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru i")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is r")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is re")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is ret")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is reta")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is retar")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is retard")}, 1000);
-    setTimeout (() => {pong.edit("Pong, Seniru is retarde")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is retarded")}, 1000),
-    setTimeout (() => {pong.edit("Pong, Seniru is retarded!")}, 1000);
-  })};
+  msg.channel.send("P").then(pong => {
+    setTimeout(() => {
+      pong.edit("Po");
+    }, 1000),
+      setTimeout(() => {
+        pong.edit("Pon");
+      }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong");
+      }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong,");
+      }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong, S");
+      }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong, Se");
+      }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong, Sen");
+      }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong, Seni");
+      }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong, Senir");
+      }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong, Seniru");
+      }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong, Seniru i");
+      }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong, Seniru is");
+      }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong, Seniru is r");
+      }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong, Seniru is re");
+      }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong, Seniru is ret");
+      }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong, Seniru is reta");
+      }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong, Seniru is retar");
+      }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong, Seniru is retard");
+      }, 1000);
+    setTimeout(() => {
+      pong.edit("Pong, Seniru is retarde");
+    }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong, Seniru is retarded");
+      }, 1000),
+      setTimeout(() => {
+        pong.edit("Pong, Seniru is retarded!");
+      }, 1000);
+  });
+};
 
-cmds.rps = async(message, args) => {
-let rps = ["scissors", "paper", "rock"];
-let i;
-if(!rps.includes(args[0])) return message.reply("Please choose rock, paper or scissor.");
-if(args[0].includes("rock")) {
-i = 2;
-}
-if(args[0].includes("paper")) {
-i = 1;
-}
-if(args[0].includes("scissors")) {
-i = 0;
-}
-if(rps[i]) {
-let comp = Math.floor((Math.random() * 3) + 1);
-let comp_res = parseInt(comp) - parseInt("1");
-let comp_val = rps[parseInt(comp_res)];
-  if(i === comp_res) {
-    return message.channel.send(`You chose **${args[0]}** and I chose **${comp_val}** and we tied, wanna try again?`); 
+cmds.rps = async (message, args) => {
+  let rps = ["scissors", "paper", "rock"];
+  let i;
+  if (!rps.includes(args[0]))
+    return message.reply("Please choose rock, paper or scissor.");
+  if (args[0].includes("rock")) {
+    i = 2;
   }
-  if(i > comp_res) {
-    return message.channel.send(`You chose **${args[0]}** and I chose **${comp_val}** and I won! Well played.`);
-  } 
-  if(i < comp_res) {
-    return message.channel.send(`You chose **${args[0]}** and I chose **${comp_val}** and I lost! Congrats on winning!`);
+  if (args[0].includes("paper")) {
+    i = 1;
+  }
+  if (args[0].includes("scissors")) {
+    i = 0;
+  }
+  if (rps[i]) {
+    let comp = Math.floor(Math.random() * 3 + 1);
+    let comp_res = parseInt(comp) - parseInt("1");
+    let comp_val = rps[parseInt(comp_res)];
+    if (i === comp_res) {
+      return message.channel.send(
+        `You chose **${
+          args[0]
+        }** and I chose **${comp_val}** and we tied, wanna try again?`
+      );
+    }
+    if (i > comp_res) {
+      return message.channel.send(
+        `You chose **${
+          args[0]
+        }** and I chose **${comp_val}** and I won! Well played.`
+      );
+    }
+    if (i < comp_res) {
+      return message.channel.send(
+        `You chose **${
+          args[0]
+        }** and I chose **${comp_val}** and I lost! Congrats on winning!`
+      );
     }
   }
 };
-cmds.purge = async(msg,args) => {
+cmds.purge = async (msg, args) => {
   if (msg.deletable) {
     msg.delete();
   }
-  
+
   if (!msg.member.hasPermission(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
     return msg.reply("You can't delete messages...").then(m => m.delete(5000));
   }
-  
-  if(isNaN(args[0]) || parseInt(args[0]) <= 0) {
-    return msg.reply("That isn't a number, Please try again.").then(msg => msg.delete(5000));
+
+  if (isNaN(args[0]) || parseInt(args[0]) <= 0) {
+    return msg
+      .reply("That isn't a number, Please try again.")
+      .then(msg => msg.delete(5000));
   }
-  
+
   let deleteAmount;
-  
+
   if (parseInt(args[0]) > 100) {
     deleteAmount = 100;
   } else {
     deleteAmount = parseInt(args[0]);
   }
-  
-  msg.channel.bulkDelete(deleteAmount, true)
+
+  msg.channel
+    .bulkDelete(deleteAmount, true)
     .then(deleted => msg.channel.send(`I deleted ${deleted.size} messages.`))
     .catch(err => msg.reply(`Something went wrong... ${err}`));
 };
 
-cmds.meme = async(msg, args) => {
-    let subreddits = [
+cmds.meme = async (msg, args) => {
+  let subreddits = [
     "comedyheaven",
     "dankmeme",
     "wholesomememes",
@@ -140,132 +235,176 @@ cmds.meme = async(msg, args) => {
     "MemeEconomy",
     "Memes_Of_The_Dank"
   ];
-    let subreddit = subreddits[Math.floor(Math.random() * subreddits.length - 1)];
-      try {
-        const description = "";
-        const { body } = await snekfetch
-            .get(`https://www.reddit.com/r/${subreddit}.json?sort=top&t=week`)
-            .query({ limit: 800 });
-        const allowed = msg.channel.nsfw ? body.data.children : body.data.children.filter(post => !post.data.over_18);
-        if (!allowed.length) return msg.channel.send('It seems we are out of fresh memes!, Try again later.');
-        if(msg.channel.name !== '😂memes') return msg.channel.send('Wrong Channel, Please head on to <#710142280484257856> to use the meme command.');
-        const randomnumber = Math.floor(Math.random() * allowed.length)
-        let embed = new Discord.MessageEmbed()
-        .setColor(0x00ff00)
-        .setDescription(`${description}\n[${allowed[randomnumber].data.title}](${allowed[randomnumber].data.url})`)
-        .setImage(allowed[randomnumber].data.url)
-        .setFooter("👍" + allowed[randomnumber].data.ups + " | 💬" + allowed[randomnumber].data.num_comments);
+  let subreddit = subreddits[Math.floor(Math.random() * subreddits.length - 1)];
+  try {
+    const description = "";
+    const { body } = await snekfetch
+      .get(`https://www.reddit.com/r/${subreddit}.json?sort=top&t=week`)
+      .query({ limit: 800 });
+    const allowed = msg.channel.nsfw
+      ? body.data.children
+      : body.data.children.filter(post => !post.data.over_18);
+    if (!allowed.length)
+      return msg.channel.send(
+        "It seems we are out of fresh memes!, Try again later."
+      );
+    if (msg.channel.name !== "😂memes")
+      return msg.channel.send(
+        "Wrong Channel, Please head on to <#710142280484257856> to use the meme command."
+      );
+    const randomnumber = Math.floor(Math.random() * allowed.length);
+    let embed = new Discord.MessageEmbed()
+      .setColor(0x00ff00)
+      .setDescription(
+        `${description}\n[${allowed[randomnumber].data.title}](${allowed[randomnumber].data.url})`
+      )
+      .setImage(allowed[randomnumber].data.url)
+      .setFooter(
+        "👍" +
+          allowed[randomnumber].data.ups +
+          " | 💬" +
+          allowed[randomnumber].data.num_comments
+      );
 
-        msg.channel.send(embed)
-        console.log(allowed[randomnumber].data.url);
-    } catch (err) {
-        return console.log(err);
-    }
+    msg.channel.send(embed);
+    console.log(allowed[randomnumber].data.url);
+  } catch (err) {
+    return console.log(err);
+  }
 };
 
-cmds.question = async(msg, args) => {
+cmds.question = async (msg, args) => {
   let qotd = args[0];
-  let question = args.splice(1).join(" ")
+  let question = args.splice(1).join(" ");
   if (!msg.member.hasPermission(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
     return msg.reply("You can't use this command...");
   }
-  
+
   let embed = new Discord.MessageEmbed()
     .setTitle("QOTD #" + qotd)
     .setDescription(question)
     .setColor(0x00ff00)
-    .setFooter(`Created By : ${msg.author.username}`)
-    
+    .setFooter(`Created By : ${msg.author.username}`);
+
   getChannel("qotd", msg.guild).send(embed);
   msg.delete();
 };
 
-cmds.qotd = async(msg, args) => {
-      try {
-        const { body } = await snekfetch
-            .get('https://www.reddit.com/r/askReddit.json?sort=top&t=week')
-            .query({ limit: 800 });
-        const allowed = msg.channel.nsfw ? body.data.children : body.data.children.filter(post => !post.data.over_18);
-        if (!allowed.length) return msg.channel.send('It seems we are out of fresh memes!, Try again later.');
-        const randomnumber = Math.floor(Math.random() * allowed.length)
-        let embed = new Discord.MessageEmbed()
-        .setColor(0x00ff00)
-        .setTitle(allowed[randomnumber].data.title)
-        .setFooter("👍" + allowed[randomnumber].data.ups + "💬" + allowed[randomnumber].data.num_comments)
-        msg.channel.send(embed)
-    } catch (err) {
-        return console.log(err);
-    }
+cmds.qotd = async (msg, args) => {
+  try {
+    const { body } = await snekfetch
+      .get("https://www.reddit.com/r/askReddit.json?sort=top&t=week")
+      .query({ limit: 800 });
+    const allowed = msg.channel.nsfw
+      ? body.data.children
+      : body.data.children.filter(post => !post.data.over_18);
+    if (!allowed.length)
+      return msg.channel.send(
+        "It seems we are out of fresh memes!, Try again later."
+      );
+    const randomnumber = Math.floor(Math.random() * allowed.length);
+    let embed = new Discord.MessageEmbed()
+      .setColor(0x00ff00)
+      .setTitle(allowed[randomnumber].data.title)
+      .setFooter(
+        "👍" +
+          allowed[randomnumber].data.ups +
+          "💬" +
+          allowed[randomnumber].data.num_comments
+      );
+    msg.channel.send(embed);
+  } catch (err) {
+    return console.log(err);
+  }
 };
 
-cmds.suggest = async(msg, args) => {
-  if (msg.channel.name !== 'suggestions') {
-    return msg.reply("Wrong Channel. Please go to <#699970320081354782> to suggest an idea of yours.")
+cmds.suggest = async (msg, args) => {
+  if (msg.channel.name !== "suggestions") {
+    return msg.reply(
+      "Wrong Channel. Please go to <#699970320081354782> to suggest an idea of yours."
+    );
   }
-  
-  let poll = args.splice(0).join(" ")
-  let embed = new Discord.MessageEmbed()
-    .setColor(0xFCD420)
-    .setDescription(poll)
 
-  getChannel("polls-approval", msg.guild).send(embed).then(embedMessage => {
-      embedMessage.react("👍")
-      embedMessage.react("👎")
-  });
-bot.on('messageReactionAdd', (reaction, user) => {
-        let message = reaction.message, emoji = reaction.emoji;
-        if (reaction.message.channel.name === "polls-approval" && reaction.me) {
-          if (emoji.name == '👍') {
-            if(reaction.count > 1) {
-              let pollsapproved = new Discord.MessageEmbed()
-                .setColor(0x00ff00)
-                .setDescription(poll)
-              
-              getChannel("📜polls", msg.guild).send(pollsapproved);
-              console.log("yas queen")
-              message.delete( { embed });
-              let approved = new Discord.MessageEmbed()
-                .setColor(0x00ff00)
-                .setDescription(poll);
-              
-              getChannel("polls-approval", msg.guild).send(approved)
-            }
-          } else {
-            if (emoji.name == '👎') {
-              if(reaction.count > 1) {
-                console.log("nah")
-                message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
-                message.delete( { embed });
-                let declined = new Discord.MessageEmbed()
-                  .setColor(0xff0000)
-                  .setDescription(poll);
-                
-                getChannel("polls-approval", msg.guild).send(declined)
-              }
-            }
+  let poll = args.splice(0).join(" ");
+  let embed = new Discord.MessageEmbed()
+    .setColor(0xfcd420)
+    .setDescription(poll);
+
+  getChannel("polls-approval", msg.guild)
+    .send(embed)
+    .then(embedMessage => {
+      embedMessage.react("👍");
+      embedMessage.react("👎");
+    });
+  bot.on("messageReactionAdd", (reaction, user) => {
+    let message = reaction.message,
+      emoji = reaction.emoji;
+    if (reaction.message.channel.name === "polls-approval" && reaction.me) {
+      if (emoji.name == "👍") {
+        if (reaction.count > 1) {
+          let pollsapproved = new Discord.MessageEmbed()
+            .setColor(0x00ff00)
+            .setDescription(poll);
+
+          getChannel("📜polls", msg.guild).send(pollsapproved);
+          console.log("yas queen");
+          message.delete({ embed });
+          let approved = new Discord.MessageEmbed()
+            .setColor(0x00ff00)
+            .setDescription(poll);
+
+          getChannel("polls-approval", msg.guild).send(approved);
+        }
+      } else {
+        if (emoji.name == "👎") {
+          if (reaction.count > 1) {
+            console.log("nah");
+            message.reactions
+              .removeAll()
+              .catch(error =>
+                console.error("Failed to clear reactions: ", error)
+              );
+            message.delete({ embed });
+            let declined = new Discord.MessageEmbed()
+              .setColor(0xff0000)
+              .setDescription(poll);
+
+            getChannel("polls-approval", msg.guild).send(declined);
+          }
         }
       }
- });
+    }
+  });
 };
-                                                           
-cmds.reddit = async(msg, args) => {
+
+cmds.reddit = async (msg, args) => {
   try {
-    args.join(" ")
+    args.join(" ");
     const { body } = await snekfetch
       .get("https://www.reddit.com/r/" + args[0] + ".json?sort=top&t=week")
-      .query({ limit: 800});
-    const allowed = msg.channel.nsfw ? body.data.children : body.data.children.filter(post => !post.data.over_18);
-    if (!allowed.length) return msg.channel.send('It seems we are at our limit!, Try again later.');
-    const randomnumber = Math.floor(Math.random() * allowed.length)
+      .query({ limit: 800 });
+    const allowed = msg.channel.nsfw
+      ? body.data.children
+      : body.data.children.filter(post => !post.data.over_18);
+    if (!allowed.length)
+      return msg.channel.send(
+        "It seems we are at our limit!, Try again later."
+      );
+    const randomnumber = Math.floor(Math.random() * allowed.length);
     let embed = new Discord.MessageEmbed()
       .setColor(0x00ff00)
       .setTitle(allowed[randomnumber].data.title)
       .setImage(allowed[randomnumber].data.url)
       .setDescription(args[0])
-      .setFooter("👍" + allowed[randomnumber].data.ups + "💬" + allowed[randomnumber].data.num_comments)
-    msg.channel.send(embed)
+      .setFooter(
+        "👍" +
+          allowed[randomnumber].data.ups +
+          "💬" +
+          allowed[randomnumber].data.num_comments
+      );
+    msg.channel.send(embed);
   } catch (err) {
-      return console.log(err);
+    return console.log(err);
   }
 };
 
@@ -475,9 +614,9 @@ cmds.updateSelfRole = msg => {
 
   msg.channel.messages.fetch("712591159284727810").then(emsg => {
     emsg.edit(embed);
-    emsg.react("712556824599199785") // roblox
-    emsg.react("712866484644479086") // male
-    emsg.react("712866515690455110") // female
+    emsg.react("712556824599199785"); // roblox
+    emsg.react("712866484644479086"); // male
+    emsg.react("712866515690455110"); // female
   });
 };
 
@@ -485,17 +624,17 @@ cmds.updateSelfRole = msg => {
 
 bot.on("ready", async () => {
   console.log(`${bot.user.username} is online!`);
-      setInterval(() => {
-        const index = Math.floor(Math.random() * (activities_list.length - 1) + 1); 
-        bot.user.setActivity(activities_list[index]);
-    }, 10000);
+  setInterval(() => {
+    const index = Math.floor(Math.random() * (activities_list.length - 1) + 1);
+    bot.user.setActivity(activities_list[index]);
+  }, 10000);
 });
 
-bot.on("message", msg => {  
+bot.on("message", msg => {
   if (msg.author.bot) return;
   if (msg.channel.type == "dm") return;
-  if(msg.content.toLowerCase().includes("no u".toLowerCase())){
-     msg.channel.send("no u");
+  if (msg.content.toLowerCase().includes("no u".toLowerCase())) {
+    msg.channel.send("no u");
   }
   if (msg.content.toLowerCase().includes("nigger".toLowerCase())) {
     msg.delete();
@@ -510,38 +649,40 @@ bot.on("message", msg => {
       .split(" ");
     let cmdName = cmdData[0];
     if (cmds[cmdName]) {
-      cmds[cmdName](msg, cmdData.splice(1));  
+      cmds[cmdName](msg, cmdData.splice(1));
     }
   }
 });
 
 // Welcome and Bye Logs
 bot.on("guildMemberAdd", async (member, message) => {
-    let embed = new Discord.MessageEmbed()
-      .setTitle(`Welcome ${member.user.username}!`)
-      .setDescription(`**${member.user.username}**, has joined the server!`)
-      .setColor(0x00ff00)
-      .setThumbnail(member.user.displayAvatarURL());
-    
+  let embed = new Discord.MessageEmbed()
+    .setTitle(`Welcome ${member.user.username}!`)
+    .setDescription(`**${member.user.username}**, has joined the server!`)
+    .setColor(0x00ff00)
+    .setThumbnail(member.user.displayAvatarURL());
+
   getChannel("👋welcome", member.guild).send(embed);
-  let general = getChannel("💬general-chat", member.guild)
+  let general = getChannel("💬general-chat", member.guild);
   let generalembed = new Discord.MessageEmbed()
     .setTitle(`Welcome ${member.user.username} to ${member.guild}!`)
-    .setDescription(`Hello ${member.user.username}! Head over to <#712574265039257611> to get your roles, and head on to <#691623148998885459> to read the rules!`)
+    .setDescription(
+      `Hello ${member.user.username}! Head over to <#712574265039257611> to get your roles, and head on to <#691623148998885459> to read the rules!`
+    )
     .setColor(0x00ff00);
-  
+
   if (general) {
-  general.send(generalembed);
+    general.send(generalembed);
   }
 });
 
 bot.on("guildMemberRemove", member => {
-    let embed = new Discord.MessageEmbed()
+  let embed = new Discord.MessageEmbed()
     .setTitle(`Goodbye ${member.user.username}!`)
     .setDescription(`**${member.user.username}**, has left the server...`)
     .setColor(0xff0000)
     .setThumbnail(member.user.displayAvatarURL());
-  
+
   getChannel("👋welcome", member.guild).send(embed);
 });
 
