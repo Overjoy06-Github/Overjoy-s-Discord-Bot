@@ -742,7 +742,7 @@ bot.on("messageUpdate", async (oldMsg, newMsg) => {
 
 bot.on("messageReactionAdd", async (reaction, user) => {
   if (user.id == bot.user.id) return;
-
+ 
   if (reaction.partial) {
     try {
       await reaction.fetch();
