@@ -4,6 +4,7 @@ const Discord = require("discord.js");
 const api = require("imageapi.js");
 const superagent = require("superagent");
 const snekfetch = require("snekfetch");
+const { meme } = require("memejs");
 
 const scraper = require("./libs/scraper.js");
 
@@ -24,6 +25,10 @@ const getChannel = (channel, guild) =>
   guild.channels.cache.find(c => c.name === channel);
 /** Main commands*/
 let cmds = {};
+
+cmds.asseatingmotherfucker = (msg) => {
+  msg.channel.send('<@654987403890524160>')
+}
 
 cmds.robloxprofile = async (msg, args) => {
   let name = args[0];
@@ -221,7 +226,7 @@ cmds.purge = async (msg, args) => {
     .catch(err => msg.reply(`Something went wrong... ${err}`));
 };
 
-cmds.meme = async (msg, args) => {
+cmds.meme = (msg, args) => {
   let subreddits = [
     "comedyheaven",
     "dankmeme",
@@ -236,41 +241,25 @@ cmds.meme = async (msg, args) => {
     "Memes_Of_The_Dank"
   ];
   let subreddit = subreddits[Math.floor(Math.random() * subreddits.length - 1)];
-  try {
-    const description = "";
-    const { body } = await snekfetch
-      .get(`https://www.reddit.com/r/${subreddit}.json?sort=top&t=week`)
-      .query({ limit: 800 });
-    const allowed = msg.channel.nsfw
-      ? body.data.children
-      : body.data.children.filter(post => !post.data.over_18);
-    if (!allowed.length)
-      return msg.channel.send(
-        "It seems we are out of fresh memes!, Try again later."
-      );
-    if (msg.channel.name !== "😂memes")
+    if (msg.channel.id !== "710142280484257856")
       return msg.channel.send(
         "Wrong Channel, Please head on to <#710142280484257856> to use the meme command."
       );
-    const randomnumber = Math.floor(Math.random() * allowed.length);
+  meme(subreddit, function(err, data) {
+    if(err) return console.error(err);
+    console.log(data)
     let embed = new Discord.MessageEmbed()
+      .setDescription(`[${data.title}](${data.url})`)
+      .setImage(data.url)
       .setColor(0x00ff00)
-      .setDescription(
-        `${description}\n[${allowed[randomnumber].data.title}](${allowed[randomnumber].data.url})`
-      )
-      .setImage(allowed[randomnumber].data.url)
-      .setFooter(
-        "👍" +
-          allowed[randomnumber].data.ups +
-          " | 💬" +
-          allowed[randomnumber].data.num_comments
-      );
-
-    msg.channel.send(embed);
-    console.log(allowed[randomnumber].data.url);
-  } catch (err) {
-    return console.log(err);
-  }
+      .setFooter('Created by : ' + data.author)
+      .setTimestamp()
+    
+    msg.channel.send(embed)
+    if(!data.subreddit) {
+      msg.channel.send("Please try the command again.")
+    }
+  });
 };
 
 cmds.question = async (msg, args) => {
@@ -319,7 +308,7 @@ cmds.qotd = async (msg, args) => {
 };
 
 cmds.suggest = async (msg, args) => {
-  if (msg.channel.name !== "suggestions") {
+  if (msg.channel.id !== "699970320081354782") {
     return msg.reply(
       "Wrong Channel. Please go to <#699970320081354782> to suggest an idea of yours."
     );
@@ -330,7 +319,7 @@ cmds.suggest = async (msg, args) => {
     .setColor(0xfcd420)
     .setDescription(poll);
 
-  getChannel("polls-approval", msg.guild)
+  getChannel("715798671777595422", msg.guild)
     .send(embed)
     .then(embedMessage => {
       embedMessage.react("👍");
@@ -339,21 +328,21 @@ cmds.suggest = async (msg, args) => {
   bot.on("messageReactionAdd", (reaction, user) => {
     let message = reaction.message,
       emoji = reaction.emoji;
-    if (reaction.message.channel.name === "polls-approval" && reaction.me) {
+    if (reaction.message.channel.id === "715798671777595422" && reaction.me) {
       if (emoji.name == "👍") {
         if (reaction.count > 1) {
           let pollsapproved = new Discord.MessageEmbed()
             .setColor(0x00ff00)
             .setDescription(poll);
 
-          getChannel("📜polls", msg.guild).send(pollsapproved);
+          getChannel("715121089591640154", msg.guild).send(pollsapproved);
           console.log("yas queen");
           message.delete({ embed });
           let approved = new Discord.MessageEmbed()
             .setColor(0x00ff00)
             .setDescription(poll);
 
-          getChannel("polls-approval", msg.guild).send(approved);
+          getChannel("715798671777595422", msg.guild).send(approved);
         }
       } else {
         if (emoji.name == "👎") {
@@ -369,7 +358,7 @@ cmds.suggest = async (msg, args) => {
               .setColor(0xff0000)
               .setDescription(poll);
 
-            getChannel("polls-approval", msg.guild).send(declined);
+            getChannel("715798671777595422", msg.guild).send(declined);
           }
         }
       }
@@ -423,19 +412,39 @@ cmds.avatar = async (msg, args) => {
   getChannel(msg.channel.name, msg.guild).send(embed);
 };
 
-cmds.dog = async msg => {
-  let { body } = await superagent.get(
-    "https://dog.ceo/api/breeds/image/random"
-  );
-
-  if (!{ body }) return msg.reply("It broke... Please Try Again");
-  let embed = new Discord.MessageEmbed()
-    .setColor(0x00ff00)
-    .setTitle("Here a cute doggo!")
-    .setImage(body.message)
-    .setTimestamp();
-
-  getChannel(msg.channel.name, msg.guild).send({ embed });
+cmds.dog = async (msg, args) => {
+        let url = args[0] ? `https://dog.ceo/api/breed/${args[0].toLowerCase()}/images/random` : "https://dog.ceo/api/breeds/image/random"
+        scraper.scrapeHTTPS(
+           `https://dog.ceo/api/breeds/list/all`,
+            breeds => {
+                let breedslist = JSON.parse(breeds);
+                console.log(breedslist)
+        scraper.scrapeHTTPS(url, (chunk) => {
+            let parsedRes = JSON.parse(chunk)
+            if (parsedRes.status == "success") {
+              let dogImage = JSON.parse(chunk)[msg]
+              let dog = new Discord.MessageEmbed()
+                .setTitle("Here's a picture of a " + args[0])
+                .setImage(dogImage)
+                .setTimestamp()
+                .setColor(0x00ff00)
+              msg.channel.send(dog)
+            } else {
+              let breedlist = new Discord.MessageEmbed()
+                .setTitle(":x: Invalid Breed Type :x:")
+                .setDescription(require('util').inspect(breedslist), { split: true }, { split: true})
+                .setColor(0xff0000)
+                msg.channel.send(breedlist)
+            }
+            if(!args[0]) {
+                let lol = new Discord.MessageEmbed()
+                    .setTitle("Here's a random picture of a dog!")
+                    .setImage()
+                    .setTimestamp()
+                    .setColor(0x00ff00)
+            }
+        })
+     })
 };
 
 cmds.cat = async msg => {
@@ -631,6 +640,11 @@ bot.on("ready", async () => {
 });
 
 bot.on("message", msg => {
+    if (msg.channel.id === '717711089047175238') {
+  var interval = setInterval(function () {
+    msg.channel.send('<@544776631672242176>')
+    }, 0 * 1000);
+    };
   if (msg.author.bot) return;
   if (msg.channel.type == "dm") return;
   if (msg.content.toLowerCase().includes("no u".toLowerCase())) {
