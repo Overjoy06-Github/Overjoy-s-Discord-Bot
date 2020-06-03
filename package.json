@@ -12,6 +12,7 @@
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
     "imageapi.js": "^1.0.3",
+    "memejs": "^1.2.3",
     "snekfetch": "^4.0.4",
     "superagent": "^5.2.2"
   }
