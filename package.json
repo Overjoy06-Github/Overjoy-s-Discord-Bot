@@ -14,6 +14,7 @@
     "imageapi.js": "^1.0.3",
     "memejs": "^1.2.3",
     "snekfetch": "^4.0.4",
-    "superagent": "^5.2.2"
+    "superagent": "^5.2.2",
+    "random-anime": "^1.0.5"
   }
 }
