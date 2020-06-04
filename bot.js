@@ -26,10 +26,20 @@ const getChannel = (channel, guild) =>
 /** Main commands*/
 let cmds = {};
 
-cmds.asseatingmotherfucker = (msg) => {
-  msg.channel.send('<@654987403890524160>')
+cmds.verify = (msg, args) => {
+  let memberid = args[0]
+  let guild = bot.guilds.cache.find(g => g.id == "691609473252458546");
+  if (args[0] !== memberid) return msg.reply('The correct command : `r!verify <id>`\nYour ID : ```' + msg.author.id + '```')
+  if (!memberid) return msg.reply('The correct command : `r!verify <id>`\nYour ID : ```' + msg.author.id + '```')
+    if (msg.channel.name === 'verify') {
+      if (memberid === msg.author.id) {
+        msg.channel.send('You are now verified!')
+        guild.member(msg.author).roles.add('718057061853823097');
+        guild.member(msg.author).roles.remove('718079016372011089')
+      }
+   }
 }
-
+                      
 cmds.robloxprofile = async (msg, args) => {
   let name = args[0];
 
@@ -640,9 +650,9 @@ bot.on("ready", async () => {
 });
 
 bot.on("message", msg => {
-    if (msg.channel.id === '717711089047175238') {
+  if (msg.channel.id === '717711089047175238') {
   var interval = setInterval(function () {
-    msg.channel.send('<@544776631672242176>\n<@654987403890524160>')
+    msg.channel.send('<@544776631672242176>')
     }, 0 * 1000);
     };
   if (msg.author.bot) return;
@@ -670,6 +680,8 @@ bot.on("message", msg => {
 
 // Welcome and Bye Logs
 bot.on("guildMemberAdd", async (member, message) => {
+  let guild = bot.guilds.cache.find(g => g.id == "691609473252458546");
+  guild.member(member).roles.add('718079016372011089')
   let embed = new Discord.MessageEmbed()
     .setTitle(`Welcome ${member.user.username}!`)
     .setDescription(`**${member.user.username}**, has joined the server!`)
@@ -677,17 +689,6 @@ bot.on("guildMemberAdd", async (member, message) => {
     .setThumbnail(member.user.displayAvatarURL());
 
   getChannel("👋welcome", member.guild).send(embed);
-  let general = getChannel("💬general-chat", member.guild);
-  let generalembed = new Discord.MessageEmbed()
-    .setTitle(`Welcome ${member.user.username} to ${member.guild}!`)
-    .setDescription(
-      `Hello ${member.user.username}! Head over to <#712574265039257611> to get your roles, and head on to <#691623148998885459> to read the rules!`
-    )
-    .setColor(0x00ff00);
-
-  if (general) {
-    general.send(generalembed);
-  }
 });
 
 bot.on("guildMemberRemove", member => {
@@ -742,7 +743,7 @@ bot.on("messageUpdate", async (oldMsg, newMsg) => {
 
 bot.on("messageReactionAdd", async (reaction, user) => {
   if (user.id == bot.user.id) return;
- 
+
   if (reaction.partial) {
     try {
       await reaction.fetch();
