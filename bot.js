@@ -5,6 +5,8 @@ const api = require("imageapi.js");
 const superagent = require("superagent");
 const snekfetch = require("snekfetch");
 const { meme } = require("memejs");
+const randomanime = require('random-anime')
+const nsfw = randomanime.nsfw()
 
 const scraper = require("./libs/scraper.js");
 
@@ -25,6 +27,11 @@ const getChannel = (channel, guild) =>
   guild.channels.cache.find(c => c.name === channel);
 /** Main commands*/
 let cmds = {};
+
+cmds.hentai = (msg) => {
+ const nsfw = randomanime.nsfw()
+  msg.channel.send(nsfw) 
+}
 
 cmds.verify = (msg, args) => {
   let memberid = args[0]
