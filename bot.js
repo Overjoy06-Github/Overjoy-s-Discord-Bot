@@ -29,21 +29,13 @@ const getChannel = (channel, guild) =>
 /** Main commands*/
 let cmds = {};
 
-cmds.test = (msg) => {
- const anime = randomanime.anime()
- let embed = {
-  image: {
-     url: anime,
-     name: "hentai" 
-  },
-  title: "hentai image" 
- }
-  msg.channel.send({ embed: embed})
-}
-
 cmds.hentai = (msg) => {
  const nsfw = randomanime.nsfw()
+ if (msg.channel.name === 'retard') {
   msg.channel.send(nsfw) 
+  } else {
+  msg.channel.send('keep this command a secret')
+  }
 }
 
 cmds.verify = (msg, args) => {
