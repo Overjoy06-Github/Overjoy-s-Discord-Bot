@@ -28,6 +28,19 @@ const getChannel = (channel, guild) =>
 /** Main commands*/
 let cmds = {};
 
+cmds.test = (msg) => {
+ const anime = randomanime()
+ let embed = {
+  image: {
+     url: anime,
+     name: "hentai" 
+  },
+  title: "hentai image" 
+ }
+
+ msg.channel.send(embed)
+}
+
 cmds.hentai = (msg) => {
  const nsfw = randomanime.nsfw()
   msg.channel.send(nsfw) 
