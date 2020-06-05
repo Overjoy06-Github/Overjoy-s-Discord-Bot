@@ -38,8 +38,7 @@ cmds.test = (msg) => {
   },
   title: "hentai image" 
  }
-
- msg.channel.send(embed)
+  msg.channel.send({ embed: embed})
 }
 
 cmds.hentai = (msg) => {
