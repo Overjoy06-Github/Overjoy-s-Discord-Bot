@@ -7,6 +7,7 @@ const snekfetch = require("snekfetch");
 const { meme } = require("memejs");
 const randomanime = require('random-anime')
 const nsfw = randomanime.nsfw()
+const anime = randomanime.anime()
 
 const scraper = require("./libs/scraper.js");
 
@@ -29,7 +30,7 @@ const getChannel = (channel, guild) =>
 let cmds = {};
 
 cmds.test = (msg) => {
- const anime = randomanime()
+ const anime = randomanime.anime()
  let embed = {
   image: {
      url: anime,
