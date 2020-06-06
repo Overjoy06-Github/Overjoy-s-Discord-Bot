@@ -31,6 +31,13 @@ const getChannel = (channel, guild) =>
 /** Main commands*/
 let cmds = {};
 
+cmds.hentai = msg => {
+ const nsfw = randomanime.nsfw()
+  if (msg.channel.name === 'nsfw') {
+    msg.channel.send(nsfw)
+  }
+}
+
 cmds.test = msg => {
   let embed = new Discord.MessageEmbed()
     .setTitle("nerd")
