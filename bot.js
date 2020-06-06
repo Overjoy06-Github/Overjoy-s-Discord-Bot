@@ -8,6 +8,8 @@ const { meme } = require("memejs");
 const randomanime = require('random-anime')
 const nsfw = randomanime.nsfw()
 const anime = randomanime.anime()
+const ud = require('urban-dictionary')
+const wtf = require("wtf_wikipedia");
 
 const scraper = require("./libs/scraper.js");
 
@@ -29,14 +31,33 @@ const getChannel = (channel, guild) =>
 /** Main commands*/
 let cmds = {};
 
-cmds.hentai = (msg) => {
- const nsfw = randomanime.nsfw()
- if (msg.channel.name === 'retard') {
-  msg.channel.send(nsfw) 
-  } else {
-  msg.channel.send('keep this command a secret')
-  }
+cmds.test = msg => {
+  let embed = new Discord.MessageEmbed()
+    .setTitle("nerd")
+    .setDescription(" loloololololo nerd")
+    .setColor(0x0f0f0f)
+  
+  msg.channel.send(embed, {split: true})
 }
+
+cmds.wikipedia = (msg, args) => {
+  let word = args.join(" ")
+  wtf.fetch(word).then((doc) => {
+    doc.sentences(0).text()
+    let embed = new Discord.MessageEmbed()
+      .setTitle(word)
+      .setDescription(doc.sentences(0).text())
+      .setColor(0x00ff00)
+    msg.channel.send({ embed: embed})
+  }).catch(err => {
+    let error = new Discord.MessageEmbed()
+      .setTitle(word)
+      .setColor(0xff0000)
+      .setDescription("No results for : " + word)
+    
+    msg.channel.send(error)
+  })
+};
 
 cmds.verify = (msg, args) => {
   let memberid = args[0]
@@ -301,32 +322,24 @@ cmds.question = async (msg, args) => {
   msg.delete();
 };
 
-cmds.qotd = async (msg, args) => {
-  try {
-    const { body } = await snekfetch
-      .get("https://www.reddit.com/r/askReddit.json?sort=top&t=week")
-      .query({ limit: 800 });
-    const allowed = msg.channel.nsfw
-      ? body.data.children
-      : body.data.children.filter(post => !post.data.over_18);
-    if (!allowed.length)
-      return msg.channel.send(
-        "It seems we are out of fresh memes!, Try again later."
-      );
-    const randomnumber = Math.floor(Math.random() * allowed.length);
+cmds.urban = (msg, args) => {
+  let definition = args.join(" ")
+  ud.term(definition, (error, entries, tags, sounds) => {
+  if (error) {
+    let error = new Discord.MessageEmbed()
+      .setTitle(definition)
+      .setColor(0xff0000)
+      .setDescription("No results for : " + definition)
+      msg.channel.send(error)
+  } else {
     let embed = new Discord.MessageEmbed()
+      .setTitle(entries[0].word)
+      .setDescription(entries[0].definition + "\n\n" + entries[0].example)
       .setColor(0x00ff00)
-      .setTitle(allowed[randomnumber].data.title)
-      .setFooter(
-        "👍" +
-          allowed[randomnumber].data.ups +
-          "💬" +
-          allowed[randomnumber].data.num_comments
-      );
-    msg.channel.send(embed);
-  } catch (err) {
-    return console.log(err);
+    
+    msg.channel.send(embed)
   }
+})
 };
 
 cmds.suggest = async (msg, args) => {
