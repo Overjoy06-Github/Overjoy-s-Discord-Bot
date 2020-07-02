@@ -682,11 +682,6 @@ bot.on("ready", async () => {
 });
 
 bot.on("message", msg => {
-  if (msg.channel.id === '717711089047175238') {
-  var interval = setInterval(function () {
-    msg.channel.send('<@544776631672242176>')
-    }, 0 * 1000);
-    };
   if (msg.author.bot) return;
   if (msg.channel.type == "dm") return;
   if (msg.content.toLowerCase().includes("no u".toLowerCase())) {
