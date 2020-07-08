@@ -39,12 +39,11 @@ cmds.hentai = msg => {
 }
 
 cmds.test = async (msg, args) => {
-  let ass = args.join(" ");
   try {
-    ass
-    msg.channel.send()
-  } catch {
-    msg.channel.send()
+    let ass = args.join(" ");
+    msg.channel.send(eval(ass))
+  } catch (e){
+    msg.channel.send(e)
   }
 }
 
