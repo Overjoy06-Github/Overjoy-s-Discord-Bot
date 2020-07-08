@@ -44,7 +44,7 @@ cmds.test = async (msg, args) => {
     let ass = args.join(" ");
     msg.channel.send(eval(ass))
   } catch (e){
-    msg.channel.send(e)
+    msg.channel.send(e.message)
   }
  }
 }
