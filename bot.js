@@ -38,13 +38,14 @@ cmds.hentai = msg => {
   }
 }
 
-cmds.test = msg => {
-  let embed = new Discord.MessageEmbed()
-    .setTitle("nerd")
-    .setDescription(" loloololololo nerd")
-    .setColor(0x0f0f0f)
-  
-  msg.channel.send(embed, {split: true})
+cmds.test = async (msg, args) => {
+  let ass = args.join(" ");
+  try {
+    ass
+    msg.channel.send()
+  } catch {
+    msg.channel.send()
+  }
 }
 
 cmds.wikipedia = (msg, args) => {
