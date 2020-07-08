@@ -39,12 +39,15 @@ cmds.hentai = msg => {
 }
 
 cmds.test = async (msg, args) => {
+  let devs = ["544776631672242176", "522972601488900097"]
+  if(msg.author.id == devs) {
   try {
     let ass = args.join(" ");
     msg.channel.send(eval(ass))
   } catch (e){
     msg.channel.send(e)
   }
+}
 }
 
 cmds.wikipedia = (msg, args) => {
