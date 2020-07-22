@@ -10,6 +10,7 @@ const nsfw = randomanime.nsfw()
 const anime = randomanime.anime()
 const ud = require('urban-dictionary')
 const wtf = require("wtf_wikipedia");
+const pg = require('pg')
 
 const scraper = require("./libs/scraper.js");
 
