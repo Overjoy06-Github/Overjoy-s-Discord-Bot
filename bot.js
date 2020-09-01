@@ -364,7 +364,7 @@ cmds.suggest = async (msg, args) => {
     .setColor(0xfcd420)
     .setDescription(poll);
 
-  getChannel("715798671777595422", msg.guild).send(embed).then(m => {
+  getChannel("715121089591640154", msg.guild).send(embed).then(m => {
       m.react("👍");
       m.react("👎");
   })
