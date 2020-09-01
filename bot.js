@@ -363,39 +363,12 @@ cmds.suggest = async (msg, args) => {
   let embed = new Discord.MessageEmbed()
     .setColor(0xfcd420)
     .setDescription(poll);
-  getChannel("polls-approval", msg.guild)
+  getChannel("📜polls", msg.guild)
     .send(embed)
     .then(embedMessage => {
       embedMessage.react("👍");
       embedMessage.react("👎");
     });
-  bot.on("messageReactionAdd", (reaction, user) => {
-    let message = reaction.message,
-      emoji = reaction.emoji;
-    if (reaction.message.channel.id === "715798671777595422" && reaction.me) {
-      if (emoji.name == "👍") {
-        if (reaction.count > 1) {
-          let pollsapproved = new Discord.MessageEmbed()
-            .setColor(0x00ff00)
-            .setDescription(poll);
-          getChannel("📜polls", msg.guild).send(pollsapproved);
-          console.log("yas queen");
-          message.delete({ embed });
-        }
-      } else {
-        if (emoji.name == "👎") {
-          if (reaction.count > 1) {
-            console.log("nah");
-            message.delete({ embed });
-            let declined = new Discord.MessageEmbed()
-              .setColor(0xff0000)
-              .setDescription(poll);
-            getChannel("polls-approval", msg.guild).send(declined);
-          }
-        }
-      }
-    }
-  });
 }
 
 cmds.reddit = async (msg, args) => {
