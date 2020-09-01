@@ -364,51 +364,10 @@ cmds.suggest = async (msg, args) => {
     .setColor(0xfcd420)
     .setDescription(poll);
 
-  getChannel("715798671777595422", msg.guild)
-    .send(embed)
-    .then(embedMessage => {
-      embedMessage.react("👍");
-      embedMessage.react("👎");
-    });
-  bot.on("messageReactionAdd", (reaction, user) => {
-    let message = reaction.message,
-      emoji = reaction.emoji;
-    if (reaction.message.channel.id === "715798671777595422" && reaction.me) {
-      if (emoji.name == "👍") {
-        if (reaction.count > 1) {
-          let pollsapproved = new Discord.MessageEmbed()
-            .setColor(0x00ff00)
-            .setDescription(poll);
-
-          getChannel("715121089591640154", msg.guild).send(pollsapproved);
-          console.log("yas queen");
-          message.delete({ embed });
-          let approved = new Discord.MessageEmbed()
-            .setColor(0x00ff00)
-            .setDescription(poll);
-
-          getChannel("715798671777595422", msg.guild).send(approved);
-        }
-      } else {
-        if (emoji.name == "👎") {
-          if (reaction.count > 1) {
-            console.log("nah");
-            message.reactions
-              .removeAll()
-              .catch(error =>
-                console.error("Failed to clear reactions: ", error)
-              );
-            message.delete({ embed });
-            let declined = new Discord.MessageEmbed()
-              .setColor(0xff0000)
-              .setDescription(poll);
-
-            getChannel("715798671777595422", msg.guild).send(declined);
-          }
-        }
-      }
-    }
-  });
+  getChannel("715798671777595422", msg.guild).send(embed).then(m => {
+      m.react("👍");
+      m.react("👎");
+  })
 };
 
 cmds.reddit = async (msg, args) => {
