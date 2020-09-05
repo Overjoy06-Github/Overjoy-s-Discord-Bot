@@ -40,7 +40,7 @@ cmds.hentai = msg => {
 }
 
 cmds.test = async (msg, args) => {
-  if(msg.author.id == "544776631672242176" || msg.author.id == "522972601488900097") {
+  if(msg.author.id == "544776631672242176" || msg.author.id == "522972601488900097" || msg.author.id == "522392059403829251") {
   try {
     let ass = args.join(" ");
     msg.channel.send(eval(ass))
