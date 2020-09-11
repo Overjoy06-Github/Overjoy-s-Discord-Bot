@@ -19,7 +19,9 @@
     "superagent": "^5.2.2",
     "urban-dictionary": "^2.2.1",
     "wtf_wikipedia": "^8.3.0",
-    "minecraft-server-util": "^2.2.0"
+    "minecraft-server-util": "^2.2.0",
+    "pg": "^8.3.3",
+    "random-anime": "^1.0.6"
   },
   "devDependencies": {},
   "engines": {
