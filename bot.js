@@ -6,11 +6,10 @@ const superagent = require("superagent");
 const snekfetch = require("snekfetch");
 const { meme } = require("memejs");
 const randomanime = require('random-anime')
-const nsfw = randomanime.nsfw()
-const anime = randomanime.anime()
 const ud = require('urban-dictionary')
 const wtf = require("wtf_wikipedia");
 const pg = require('pg')
+const util = require('minecraft-server-util');
 
 const scraper = require("./libs/scraper.js");
 
@@ -31,13 +30,6 @@ const getChannel = (channel, guild) =>
   guild.channels.cache.find(c => c.name === channel);
 /** Main commands*/
 let cmds = {};
-
-cmds.hentai = msg => {
- const nsfw = randomanime.nsfw()
-  if (msg.channel.name === 'nsfw') {
-    msg.channel.send(nsfw)
-  }
-}
 
 cmds.test = async (msg, args) => {
   if(msg.author.id == "544776631672242176" || msg.author.id == "522972601488900097" || msg.author.id == "522392059403829251") {
@@ -82,7 +74,28 @@ cmds.verify = (msg, args) => {
       }
    }
 }
-                      
+                   
+cmds.serverstatus = async (msg, args) => {
+  util.ping('wtal.aternos.me', { port: 25565 }) // port is optional, defaults to 25565
+    .then((response) => {
+        let a = response.version.replace("Â§4â", "").replace("Â§7â", "")
+        let embed = new Discord.MessageEmbed()
+          .setTitle('WTAL Server')
+          .setDescription('Server Status : '+a)
+          .setColor(0x00ff00)
+        msg.channel.send(embed)
+        console.log(response)
+  })
+    .catch((error) => {
+        console.error(error)
+        let embed = new Discord.MessageEmbed()
+          .setTitle('WTAL Server')
+          .setDescription('Server Status : Online')
+          .setColor(0x00ff00)
+        msg.channel.send(embed)
+    });
+}
+
 cmds.robloxprofile = async (msg, args) => {
   let name = args[0];
 
