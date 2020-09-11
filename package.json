@@ -15,12 +15,11 @@
     "imageapi.js": "^1.0.3",
     "memejs": "^1.2.3",
     "random-puppy": "^1.1.0",
-    "random-anime": "^1.0.5",
     "snekfetch": "^4.0.4",
     "superagent": "^5.2.2",
     "urban-dictionary": "^2.2.1",
     "wtf_wikipedia": "^8.3.0",
-    "pg": "^8.3.0"
+    "minecraft-server-util": "^2.2.0"
   },
   "devDependencies": {},
   "engines": {
