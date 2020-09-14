@@ -660,12 +660,6 @@ bot.on("ready", async () => {
 bot.on("message", msg => {
   if (msg.author.bot) return;
   if (msg.channel.type == "dm") return;
-  if (msg.content.toLowerCase().includes("no u".toLowerCase())) {
-    msg.channel.send("no u");
-  }
-  if (msg.content.toLowerCase().includes("nigger".toLowerCase())) {
-    msg.delete();
-  }
   if (
     msg.content.startsWith(prefix) ||
     msg.content.startsWith(prefix.toUpperCase())
