@@ -307,7 +307,7 @@ cmds.meme = (msg, args) => {
     "Memes_Of_The_Dank"
   ];
   let subreddit = subreddits[Math.floor(Math.random() * subreddits.length - 1)];
-    if (msg.channel.id !== "710142280484257856")
+    if (msg.channel.name !== "memes") // 710142280484257856
       return msg.channel.send(
         "Wrong Channel, Please head on to <#710142280484257856> to use the meme command."
       );
