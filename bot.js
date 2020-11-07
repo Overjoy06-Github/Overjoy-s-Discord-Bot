@@ -388,7 +388,7 @@ cmds.reddit = async (msg, args) => {
   try {
     args.join(" ");
     const { body } = await snekfetch
-      .get("https://www.reddit.com/r/" + args[0] + ".json?sort=top&t=week")
+      .get("https://www.reddit.com/r/" + args[0] + "/top/?t=month")
       .query({ limit: 800 });
     const allowed = msg.channel.nsfw
       ? body.data.children
