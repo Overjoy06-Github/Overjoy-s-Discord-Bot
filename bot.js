@@ -326,8 +326,8 @@ cmds.meme = async (msg, args) => {
     let embed = new Discord.MessageEmbed()
       .setColor(0x00ff00)
       .setTitle(allowed[randomnumber].data.title)
+      .setURL("https://reddit.com"+allowed[randomnumber].data.permalink)
       .setImage(allowed[randomnumber].data.url)
-      .setDescription(args[0])
       .setFooter(
         "👍" +
           allowed[randomnumber].data.ups +
