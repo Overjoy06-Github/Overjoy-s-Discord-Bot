@@ -293,39 +293,51 @@ cmds.purge = async (msg, args) => {
 };
 
 cmds.meme = (msg, args) => {
-  let subreddits = [
-    "comedyheaven",
-    "dankmeme",
-    "wholesomememes",
-    "minecraftmemes",
-    "PrequelMemes",
-    "HistoryMemes",
-    "dankchristianmemes",
-    "memes",
-    "meme",
-    "MemeEconomy",
-    "Memes_Of_The_Dank"
-  ];
-  let subreddit = subreddits[Math.floor(Math.random() * subreddits.length - 1)];
     if (msg.channel.name !== "😂memes") // 710142280484257856
       return msg.channel.send(
         "Wrong Channel, Please head on to <#710142280484257856> to use the meme command."
       );
-  meme(subreddit, function(err, data) {
-    if(err) return console.error(err);
-    console.log(data)
+  try {
+    let subreddits = [
+      "comedyheaven",
+      "dankmeme",
+      "wholesomememes",
+      "minecraftmemes",
+      "PrequelMemes",
+      "HistoryMemes",
+      "dankchristianmemes",
+      "memes",
+      "meme",
+      "MemeEconomy",
+      "Memes_Of_The_Dank"
+    ];
+  let subreddit = subreddits[Math.floor(Math.random() * subreddits.length - 1)];
+    const { body } = await snekfetch
+      .get("https://www.reddit.com/r/" + subreddit + "/top/.json?t=month")
+      .query({ limit: 800 });
+    const allowed = msg.channel.nsfw
+      ? body.data.children
+      : body.data.children.filter(post => !post.data.over_18);
+    if (!allowed.length)
+      return msg.channel.send(
+        "It seems we are at our limit!, Try again later."
+      );
+    const randomnumber = Math.floor(Math.random() * allowed.length);
     let embed = new Discord.MessageEmbed()
-      .setDescription(`[${data.title}](${data.url})`)
-      .setImage(data.url)
       .setColor(0x00ff00)
-      .setFooter('Created by : ' + data.author)
-      .setTimestamp()
-    
-    msg.channel.send(embed)
-    if(!data.subreddit) {
-      msg.channel.send("Please try the command again.")
-    }
-  });
+      .setTitle(allowed[randomnumber].data.title)
+      .setImage(allowed[randomnumber].data.url)
+      .setDescription(args[0])
+      .setFooter(
+        "👍" +
+          allowed[randomnumber].data.ups +
+          "💬" +
+          allowed[randomnumber].data.num_comments
+      );
+    msg.channel.send(embed);
+  } catch (err) {
+    return console.log(err);
+  }
 };
 
 cmds.question = async (msg, args) => {
