@@ -292,7 +292,7 @@ cmds.purge = async (msg, args) => {
     .catch(err => msg.reply(`Something went wrong... ${err}`));
 };
 
-cmds.meme = (msg, args) => {
+cmds.meme = async (msg, args) => {
     if (msg.channel.name !== "😂memes") // 710142280484257856
       return msg.channel.send(
         "Wrong Channel, Please head on to <#710142280484257856> to use the meme command."
